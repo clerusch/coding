@@ -1,0 +1,6 @@
+README.md
+setup.py
+clemlib.egg-info/PKG-INFO
+clemlib.egg-info/SOURCES.txt
+clemlib.egg-info/dependency_links.txt
+clemlib.egg-info/top_level.txt

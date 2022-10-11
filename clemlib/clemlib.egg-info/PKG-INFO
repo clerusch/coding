@@ -1,0 +1,6 @@
+Metadata-Version: 2.1
+Name: clemlib
+Version: 0.1.0
+Summary: A python library for repetition code generation & testing
+Author: Clemens Schumann
+License: FU Berlin, 2022
