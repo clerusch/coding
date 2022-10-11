@@ -25,7 +25,7 @@ def test(number:int,codelength:int,noise:float):
         else: howgood += [True] 
     return howgood 
 
-def probabilities(howgood:list[bool],step:int=1000):
+def transprob(howgood:list[bool],step:int=1000):
     """
     Generates a list of probabilities from a sucess/failure list
 
