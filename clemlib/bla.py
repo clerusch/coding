@@ -16,9 +16,13 @@ class ringMessage:
                 self.syndrome[i] = (self.syndrome[i] + 1) % 2
                 self.syndrome[i-1] = (self.syndrome[i-1] + 1) % 2
     def decode(self, codelength=5):
-        pcm = np.array([[1,1,0,0,0],[0,1,1,0,0],[0,0,1,1,0],[0,0,0,1,1],[1,0,0,0,1]])
+        pcm = np.array([[1,1,0,0,0],
+                        [0,1,1,0,0],
+                        [0,0,1,1,0],
+                        [0,0,0,1,1],
+                        [1,0,0,0,1]])
         print(pcm @ self.content.T, self.syndrome.T)
-        # self.content = pcm.__invert__ @ self.syndrome.T 
+        print(pcm.T@self.syndrome.T) 
         # for i in range(len(self.content)):
         #     self.content[i] = (self.content[i]+1)%2
 
