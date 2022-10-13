@@ -60,10 +60,10 @@ def plotter(howgood):
     ax.plot_surface(x, y, z, cmap ='viridis', edgecolor ='green')
     ax.set_title('Surface plot geeks for geeks')
     """
-    plt.plot([i for i in range(int(len(howgood)/1000))],probabilities(howgood)) 
+    plt.plot([i for i in range(int(len(howgood)/1000))],transprob(howgood)) 
     plt.show() 
 def main():
-    plotter(test(5000)) 
+    plotter(test(5000,3,0.5)) 
     pass 
 
 if __name__ == '__main__':
