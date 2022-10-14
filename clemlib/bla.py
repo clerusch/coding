@@ -29,19 +29,17 @@ class ringMessage:
         for i in range(codelength):
             pcm[i,i] = 1
             pcm[i,i-codelength+1] = 1
-        #print(pcm)
+        #this here  is what pcm looks like for codelength 5
         pcb = np.array([[1, 1, 0, 0, 0],
                         [0, 1, 1, 0, 0],
                         [0, 0, 1, 1, 0],
                         [0, 0, 0, 1, 1],
                         [1, 0, 0, 0, 1]])
         # This matrix is square and has full rank, so its invertible
-        noise = (inv(pcm)@self.syndrome.T).T
+        noise = np.array((inv(pcm)@self.syndrome.T).T, dtype=int)
         self.content = (self.content + noise)%2
         self.stage = "Hopefully my corrections were right UwU"
-        # for i in range(len(self.content)):
-        #     a = int(self.content[i]); print(a)
-        #     self.content[i] = a
+        
 
 word = ringMessage()
 word.show()
