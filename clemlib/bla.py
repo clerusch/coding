@@ -22,7 +22,12 @@ class ringMessage:
                 self.syndrome[i-1] = (self.syndrome[i-1] + 1) % 2
 
     def decode(self, codelength=5):
-        pcm = np.array([[1, 1, 0, 0, 0],
+        pcm = np.array([[0 for _ in range(codelength)] for _ in range(codelength)])
+        for i in range(codelength):
+            pcm[i,i] = 1
+            pcm[i,i-codelength+1] = 1
+        print(pcm)
+        pcb = np.array([[1, 1, 0, 0, 0],
                         [0, 1, 1, 0, 0],
                         [0, 0, 1, 1, 0],
                         [0, 0, 0, 1, 1],
@@ -30,8 +35,9 @@ class ringMessage:
         # This matrix is square and has full rank, so its invertible
         noise = (inv(pcm)@self.syndrome.T).T
         self.content = (self.content + noise)%2
-        for i in range(len(self.content)):
-            self.content[i] = int(self.content[i])
+        # for i in range(len(self.content)):
+        #     a = int(self.content[i]); print(a)
+        #     self.content[i] = a
 
 word = ringMessage()
 word.show()
