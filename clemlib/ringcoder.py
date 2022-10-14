@@ -9,20 +9,23 @@ class ringMessage:
         self.content = np.array([bit])
         self.show = lambda: print(
             f"Content:{self.content} \nSyndrome:{self.syndrome}"+
-            "\n"+self.stage)
+            f"\nNoise:{self.noise}"+"\n"+self.stage)
         self.syndrome = np.array([])
+        self.noise = np.array([])
         self.stage = "Oh no, how will I survive a physical error?"
 
     def encode(self, codelength=5):
         self.content = np.array(
             [self.content[0] for _ in range(codelength)])
         self.syndrome = np.array([0 for _ in range(codelength)])
+        self.noise = np.array([0 for _ in range(codelength)])
         self.stage = "I am encoded"
 
-    def noisify(self, noisiness=0.25):
+    def noisify(self, noisiness=0.2):
         for i in range(len(self.content)):
             if np.random.random() < noisiness:
                 self.content[i] = (self.content[i] + 1) % 2
+                self.noise[i] = (self.content[i] + 1) % 2
                 self.syndrome[i] = (self.syndrome[i] + 1) % 2
                 self.syndrome[i-1] = (self.syndrome[i-1] + 1) % 2
         self.stage = "I have been subjected to noise :("
@@ -32,37 +35,57 @@ class ringMessage:
         for i in range(codelength):
             pcm[i,i] = 1; pcm[i,i-codelength+1] = 1
         #this here  is what pcm looks like for codelength 5
-        pcb = np.array([[1, 1, 0, 0, 0],
+        
+        # Ring pcm matrices are square and have full rank, so they're invertible
+        noise = np.array([abs(thing) for thing in (inv(pcm)@self.syndrome.T).T], dtype=int)
+        print(noise)
+        self.content = (self.content + noise) % 2
+        self.stage = "Hopefully my corrections were right UwU"
+
+pcb = np.array([[1, 1, 0, 0, 0],
                         [0, 1, 1, 0, 0],
                         [0, 0, 1, 1, 0],
                         [0, 0, 0, 1, 1],
                         [1, 0, 0, 0, 1]])
-        # Ring pcm matrices are square and have full rank, so they're invertible
-        noise = np.array((inv(pcm)@self.syndrome.T).T, dtype=int)
-        self.content = (self.content + noise) % 2
-        self.stage = "Hopefully my corrections were right UwU"
-        
-amount = 100000
-smoothness = 1000
-lErrorCount = []
-pErrorCount = []
-words = [ringMessage(number=i) for i in range(amount)]
-for i in range(amount):
-    noisiprob = i/(amount)
-    pErrorCount.append(noisiprob)
-    words[i].encode(5)
-    real = words[i].content
-    words[i].noisify(noisiprob)
-    words[i].decode(5)
-    if np.array_equal(real,words[i].content):
-        lErrorCount.append(0)
-    else: lErrorCount.append(1)
+# print(inv(pcb)@pcb)
+def testfunction():
+    word = ringMessage()
+    word.encode()
+    word.show()
+    word.noisify()
+    word.show()
+    word.decode()
+    word.show()
+testfunction()
+def doer(distance):
+    amount = 100000
+    smoothness = 800
+    lErrorCount = []
+    pErrorCount = []
+    words = [ringMessage(number=i) for i in range(amount)]
+    for i in range(amount):
+        noisiprob = i/(amount)
+        pErrorCount.append(noisiprob)
+        words[i].encode(distance)
+        real = words[i].content
+        words[i].noisify(noisiprob)
+        words[i].decode(distance)
+        if np.array_equal(real,words[i].content):
+            lErrorCount.append(0)
+        else: lErrorCount.append(1)
+    logical_error_rate = [(sum(lErrorCount[i:i+smoothness])/smoothness) \
+        for i in range(0,amount-smoothness,smoothness)] 
+    physical_error_rate = [(sum(pErrorCount[i:i+smoothness])/smoothness) \
+        for i in range(0,amount-smoothness,smoothness)]
+    return physical_error_rate, logical_error_rate
+"""
+a,b = doer(3)
+plt.plot(a,b, label="Distance 3")
+c,d = doer(5)
+plt.plot(c,d, label="Distance 5")
+e,f = doer(11)
+plt.plot(e,f, label="Distance 11")
 
-logical_error_rate = [(sum(lErrorCount[i:i+smoothness])/smoothness) \
-    for i in range(0,amount-smoothness,smoothness)] 
-physical_error_rate = [(sum(pErrorCount[i:i+smoothness])/smoothness) \
-    for i in range(0,amount-smoothness,smoothness)]
-
-plt.plot(physical_error_rate,logical_error_rate)
-plt.savefig(f"Samplesize={amount}smoothness={smoothness}")
+plt.legend(loc="upper left")
 plt.show()
+"""
