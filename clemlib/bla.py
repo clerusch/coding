@@ -1,8 +1,11 @@
 import numpy as np
 from numpy.linalg import inv
+import matplotlib.pyplot as plt
 
 class ringMessage:
-    def __init__(self, bit=0):
+    def __init__(self, bit=0, name=None, number=0):
+        self.number = number
+        self.name = name
         self.content = np.array([bit])
         self.show = lambda: print(
             f"Content:{self.content} \nSyndrome:{self.syndrome}"+
@@ -27,25 +30,47 @@ class ringMessage:
     def decode(self, codelength=5):
         pcm = np.array([[0 for _ in range(codelength)] for _ in range(codelength)])
         for i in range(codelength):
-            pcm[i,i] = 1
-            pcm[i,i-codelength+1] = 1
+            pcm[i,i] = 1; pcm[i,i-codelength+1] = 1
         #this here  is what pcm looks like for codelength 5
         pcb = np.array([[1, 1, 0, 0, 0],
                         [0, 1, 1, 0, 0],
                         [0, 0, 1, 1, 0],
                         [0, 0, 0, 1, 1],
                         [1, 0, 0, 0, 1]])
-        # This matrix is square and has full rank, so its invertible
+        # Ring pcm matrices are square and have full rank, so they're invertible
         noise = np.array((inv(pcm)@self.syndrome.T).T, dtype=int)
-        self.content = (self.content + noise)%2
+        self.content = (self.content + noise) % 2
         self.stage = "Hopefully my corrections were right UwU"
         
 
-word = ringMessage()
-word.show()
-word.encode(9)
-word.show()
-word.noisify()
-word.show()
-word.decode(9)
-word.show()
+# word = ringMessage()
+# word.show()
+# word.encode()
+# word.show()
+# word.noisify()
+# word.show()
+# word.decode()
+# word.show()
+
+amount = 500
+stuff = []
+words = [ringMessage(number=i) for i in range(amount)]
+for i in range(amount):
+    noisiprob = i/(2*amount)
+    words[i].encode()
+    real = words[i].content
+    words[i].noisify(noisiprob)
+    words[i].decode()
+    if np.array_equal(real,words[i].content):
+        stuff.append(0)
+    else: stuff.append(1)
+# print(stuff)
+smoothness = 100
+logical_error_rate = [(sum(stuff[i:i+smoothness])/smoothness) \
+    for i in range(0,amount-smoothness,smoothness)] 
+
+
+
+print(logical_error_rate)
+# a = [1,2,3,4,5,6]
+# print(sum(a))
