@@ -1,5 +1,5 @@
 import numpy as np
-
+from numpy.linalg import inv
 
 class ringMessage:
     def __init__(self, bit=0):
@@ -27,11 +27,11 @@ class ringMessage:
                         [0, 0, 1, 1, 0],
                         [0, 0, 0, 1, 1],
                         [1, 0, 0, 0, 1]])
-        print(pcm @ self.content.T, self.syndrome.T)
-        print(pcm.T@self.syndrome.T)
-        # for i in range(len(self.content)):
-        #     self.content[i] = (self.content[i]+1)%2
-
+        # This matrix is square and has full rank, so its invertible
+        noise = (inv(pcm)@self.syndrome.T).T
+        self.content = (self.content + noise)%2
+        for i in range(len(self.content)):
+            self.content[i] = int(self.content[i])
 
 word = ringMessage()
 word.show()
@@ -40,3 +40,4 @@ word.show()
 word.noisify()
 word.show()
 word.decode()
+word.show()
