@@ -33,21 +33,27 @@ class ringMessage:
     def decode(self, codelength=5):
         pcm = np.array([[0 for _ in range(codelength)] for _ in range(codelength)])
         for i in range(codelength):
-            pcm[i,i] = 1; pcm[i,i-codelength+1] = 1
-        #this here  is what pcm looks like for codelength 5
-        
+            pcm[i,i] = 1; pcm[i,i-codelength+1] = 1        
         # Ring pcm matrices are square and have full rank, so they're invertible
         noise = np.array([abs(thing) for thing in (inv(pcm)@self.syndrome.T).T], dtype=int)
         print(noise)
         self.content = (self.content + noise) % 2
         self.stage = "Hopefully my corrections were right UwU"
 
+noise = np.array([0,1,1,0,0])
+noise2 = np.array([1,0,0,1,1])
+
 pcb = np.array([[1, 1, 0, 0, 0],
-                        [0, 1, 1, 0, 0],
-                        [0, 0, 1, 1, 0],
-                        [0, 0, 0, 1, 1],
-                        [1, 0, 0, 0, 1]])
-# print(inv(pcb)@pcb)
+                [0, 1, 1, 0, 0],
+                [0, 0, 1, 1, 0],
+                [0, 0, 0, 1, 1],
+                [1, 0, 0, 0, 1]])
+print(np.linalg.det(pcb))
+# syndrome = pcb@noise
+print(pcb@noise)
+print((pcb@noise2))
+# print(f"This is the Determinant: {np.linalg.det(pcb)}\nThis is not 0 :(")
+
 def testfunction():
     word = ringMessage()
     word.encode()
@@ -56,7 +62,7 @@ def testfunction():
     word.show()
     word.decode()
     word.show()
-testfunction()
+# testfunction()
 def doer(distance):
     amount = 100000
     smoothness = 800
@@ -78,6 +84,16 @@ def doer(distance):
     physical_error_rate = [(sum(pErrorCount[i:i+smoothness])/smoothness) \
         for i in range(0,amount-smoothness,smoothness)]
     return physical_error_rate, logical_error_rate
+
+vec1 = np.array([1,0,0,0,1])
+vec2 = np.array([1,1,0,0,0])
+vec3 = np.array([0,1,1,0,0])
+vec4 = np.array([0,0,1,1,0])
+vec5 = np.array([0,0,0,1,1])
+
+#print(vec4.T+vec1.T-vec3.T-vec2.T)
+
+
 """
 a,b = doer(3)
 plt.plot(a,b, label="Distance 3")
