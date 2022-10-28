@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from pymatching import Matching
 
 def gen_ring_pcm(distance):
     pcm = np.eye(distance, dtype=int)
@@ -20,10 +21,11 @@ def ring_decoder(noisy_message, syndrome):
 def calc_ler(n_runs, distance, per):
     pcm = gen_ring_pcm(distance)
     n_logical_errors = 0
+    matching = Matching(pcm)
     for _ in range(n_runs):
         error = (np.random.rand(distance) < per).astype(np.uint8)
         syndrome = (pcm@error) % 2
-        result = ring_decoder(error,syndrome)
+        result = matching.decode(error,syndrome)
         if sum(result)>0:
             n_logical_errors+=1
     return n_logical_errors/n_runs
@@ -49,7 +51,7 @@ for d in [3,5,51]:
     ler = []
     per = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
     for p in per:
-        ler_new = calc_ler(1000,d,p)
+        ler_new = calc_ler(100,d,p)
         ler.append(ler_new)
     plt.plot(per, ler,label=d)
     plt.legend()

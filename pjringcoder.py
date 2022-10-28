@@ -7,7 +7,6 @@ def calc_ler(n_runs, distance,per):
     for i in range(distance):
         pcm[i][(i+1)%distance] = 1
     matching=Matching(pcm)
-    matching.draw()
     n_logical_errors=0
     for _ in range(n_runs):
         error = (np.random.rand(distance) < per).astype(np.uint8)

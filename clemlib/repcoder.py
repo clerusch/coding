@@ -2,6 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import sys 
 
+def noisificate(message,per):
+    for l in message:
+        if np.random.rand() > per:
+            l = (l+1)%2
+
+def decoderator(message, syndrome):
+    res = np.zeros(len(message))
+    if sum(message>(len(message)/2)):
+        [res[i] = 1 for i in range(len(res))]
+    else: [res[i] = 0 for i in range(len(res))]
+
+
 def wordgenerator(length=1000):
     """
     Generates a word consisting of 0s and 1s
@@ -93,7 +105,20 @@ def decoder(word:str,replength:int=3):
             answer += "1" 
     return answer 
 
-def main(number):
+def lercalc(n_runs, distance, per):
+    message = encoder("0", distance)
+    nle = 0
+    print(per)
+    for _ in range(n_runs):
+        noised = noisify(message, probability=per)
+        decoded = decoder(noised, distance)
+        print(decoded, message)
+        if decoded == message:
+            pass
+        else: nle += 1
+    return nle/n_runs
+
+def main():
     """Performs tests with all numbers up to the given number
 
     Args:
@@ -102,9 +127,20 @@ def main(number):
     Returns:
         Bool: Wether out tests were successful
     """
-    # this is kind of useless
-    for _ in range(50):
-        print(majvote("000111000")) 
+    
+    # calc_ler(1000, 5, 0.3)
+    for d in [3]:
+        ler = []
+        per = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
+        for p in per:
+            newler = lercalc(1000,d,p)
+            ler.append(newler)
+        plt.plot(per, ler,label=d)
+    plt.legend()
+    plt.show()
      
 if __name__ == '__main__':
-    main(sys.argv[1])
+    if len(sys.argv)<=1:
+        main()
+    else: 
+        main(sys.argv[1])

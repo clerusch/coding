@@ -12,28 +12,28 @@ class Node:
         return self.i
 
 class Graph:
-    def __init__(self, nodes=[]):
+    def __init__(self, nodes=set()):
         self.nodes = nodes
 
     def add_node(self, val):
         new_node = Node(val)
-        self.nodes.append(new_node)
+        self.nodes.add(new_node)
 
     def add_edge(self, node1, node2):
-        node1.edges.append(node2)
-        node2.edges.append(node1)
+        node1.edges.add(node2)
+        node2.edges.add(node1)
 
 class Cluster:
-    def __init__(self, nodes=[]):
+    def __init__(self, nodes=set()):
         self.nodes = nodes
-        self.start_nodes = [nodes[0]]
+        self.start_nodes = nodes
     def grow(self):
-        new = []
-        new += self.nodes
+        new = set()
+        new.add(self.nodes)
         for node in self.nodes:
             for edge in node.edges:
                 if not edge in new:
-                    new.append(edge)
+                    new.add(edge)
         self.nodes = new
 
 def genClustersOnGraph(syndrome):
@@ -45,13 +45,13 @@ def genClustersOnGraph(syndrome):
     graph = Graph()
     
     for i in range(number):
-        graph.add_node(i)
-    for i in range(number):
-        graph.add_edge(graph.nodes[i], graph.nodes[i-1])
+        graph.add_edge(graph.add_node(i), graph.add_node(i-1))
+    # for i in range(number):
+    #     graph.add_edge(graph.nodes[i], graph.nodes[i-1])
         # graph.add_edge(graph.nodes[i], graph.nodes[i-int(np.sqrt(number))]) # for size 10 2d
     clusters = []
     for i,location in enumerate(locations):
-        clusters.append(Cluster([graph.nodes[location]]))
+        clusters.add(Cluster([graph.nodes[location]]))
     return clusters
 
 def growClusters(clusters):
