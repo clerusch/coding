@@ -2,13 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pymatching import Matching
 from sys import argv
-"""
-This is to test decoding algorithms for repetition based codes
-"""
 
 def genRepPCM(distance):
     """
     Generates a repetition code parity-check-matrix
+    Args:
+        distance(Int): distance of the code 
+    Returns:
+        pcm(np.array([[]])): repetition code parity check matrix corresponding to distance
     """
     nq = distance   # number of qubits
     na = nq - 1     # number of ancillas
@@ -20,7 +21,13 @@ def genRepPCM(distance):
 
 def genRingPCM(distance):
     """
-    Generates a ring code parity-check-matrix of specific distance
+    Generates a ring code parity-check-matrix
+
+    Args:
+        distance(Int): distance of 
+
+    Returns:
+        pcm(np.array([[]])): generated parity check matrix of distance
     """
     pcm=np.eye(distance)
     for i in range(distance):
@@ -30,6 +37,15 @@ def genRingPCM(distance):
 def lerCalc(pcmType, nr = 100, dist = 5, per = 0.3):
     """
     Calculates a logical error rate of dist code assuming specific physical error rate
+
+    Args:
+        pcmType(Int->PCM): Function to generate a pcm from a distance
+        nr(Int)   :        Number of runs
+        dist(Int) :        Distance of the code to analyse
+        per(Float):        Physical error rate to assume during analysis
+    
+    Returns:
+        ler(Float):        Logical error rate of coding scheme with given parameters
     """
     pcm = pcmType(dist)
     matching = Matching(pcm)
@@ -41,11 +57,12 @@ def lerCalc(pcmType, nr = 100, dist = 5, per = 0.3):
         res = (corr + error) % 2
         if sum(res) > 0:
             nle += 1
-    return nle/nr
+    ler = nle/nr
+    return ler
 
-def main(dists = [5,51]):
+def main(dists = [3, 9]):
     """
-    For simplicity's sake this will test on a zero message
+    This will test and Plot schemes at distances
     """
     for d in dists:
         ler = []
@@ -66,3 +83,4 @@ def main(dists = [5,51]):
 
 if __name__ == "__main__":
     main()
+    
