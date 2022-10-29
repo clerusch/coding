@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pymatching import Matching
 from sys import argv
+from classicalHypergraph import cHypergraph
 
 def genRepPCM(distance):
     """
@@ -34,6 +35,9 @@ def genRingPCM(distance):
         pcm[i][(i+1)%distance] = 1
     return pcm
 
+
+
+
 def lerCalc(pcmType, nr = 100, dist = 5, per = 0.3):
     """
     Calculates a logical error rate of dist code assuming specific physical error rate
@@ -47,7 +51,9 @@ def lerCalc(pcmType, nr = 100, dist = 5, per = 0.3):
     Returns:
         ler(Float):        Logical error rate of coding scheme with given parameters
     """
-    pcm = pcmType(dist)
+    hx = genRingPCM(dist)
+    hz = genRingPCM(dist)
+    pcm = cHypergraph(hx,hz,dist)[0]
     matching = Matching(pcm)
     nle = 0
     for _ in range(nr):
@@ -60,7 +66,7 @@ def lerCalc(pcmType, nr = 100, dist = 5, per = 0.3):
     ler = nle/nr
     return ler
 
-def main(dists = [3, 9]):
+def main(dists = [3, 9,50]):
     """
     This will test and Plot schemes at distances
     """
@@ -71,12 +77,12 @@ def main(dists = [3, 9]):
             new_ler = lerCalc(genRepPCM,1000, d, p)
             ler.append(new_ler)
         plt.plot(per, ler, label=f"rep {d}")
-        ler = []
-        per = [i/10 for i in range(10)]
-        for p in per:
-            new_ler = lerCalc(genRingPCM,1000, d, p)
-            ler.append(new_ler)
-        plt.plot(per, ler, label=f"ring {d}")
+        # ler = []
+        # per = [i/10 for i in range(10)]
+        # for p in per:
+        #     new_ler = lerCalc(genRingPCM,1000, d, p)
+        #     ler.append(new_ler)
+        # plt.plot(per, ler, label=f"ring {d}")
     plt.legend()
     plt.show()
 
