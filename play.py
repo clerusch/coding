@@ -6,4 +6,4 @@ pcm = np.array([[0 for _ in range(nq)] for _ in range(na)])
 for i in range(na):
     pcm[i][i] = 1
     pcm[i][(i+1) % nq] = 1
-print(pcm)
+print(pcm) 

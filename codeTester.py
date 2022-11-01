@@ -1,44 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from pymatching import Matching
-from sys import argv
-from classicalHypergraph import cHypergraph
+from pcmGenerators import genRingPCM, genRepPCM, cHypergraph
 
-def genRepPCM(distance):
-    """
-    Generates a repetition code parity-check-matrix
-    Args:
-        distance(Int): distance of the code 
-    Returns:
-        pcm(np.array([[]])): repetition code parity check matrix corresponding to distance
-    """
-    nq = distance   # number of qubits
-    na = nq - 1     # number of ancillas
-    pcm = np.array([[0 for _ in range(nq)] for _ in range(na)])
-    for i in range(na):
-        pcm[i][i] = 1
-        pcm[i][(i+1) % nq] = 1
-    return pcm
-
-def genRingPCM(distance):
-    """
-    Generates a ring code parity-check-matrix
-
-    Args:
-        distance(Int): distance of 
-
-    Returns:
-        pcm(np.array([[]])): generated parity check matrix of distance
-    """
-    pcm=np.eye(distance)
-    for i in range(distance):
-        pcm[i][(i+1)%distance] = 1
-    return pcm
-
-
-
-
-def lerCalc(pcmType, nr = 100, dist = 5, per = 0.3):
+def lerCalc(pcm, nr = 100, dist = 5, per = 0.3):
     """
     Calculates a logical error rate of dist code assuming specific physical error rate
 
@@ -51,13 +16,10 @@ def lerCalc(pcmType, nr = 100, dist = 5, per = 0.3):
     Returns:
         ler(Float):        Logical error rate of coding scheme with given parameters
     """
-    hx = genRingPCM(dist)
-    hz = genRingPCM(dist)
-    pcm = cHypergraph(hx,hz,dist)[0]
     matching = Matching(pcm)
     nle = 0
     for _ in range(nr):
-        error = (np.random.rand(dist) < per).astype(np.uint8)
+        error = (np.random.rand(4*dist**2) < per).astype(np.uint8)
         syndrome = (pcm@error) % 2
         corr = matching.decode(syndrome)
         res = (corr + error) % 2
@@ -66,15 +28,19 @@ def lerCalc(pcmType, nr = 100, dist = 5, per = 0.3):
     ler = nle/nr
     return ler
 
-def main(dists = [3, 9,50]):
+def main(dists = [5,9,11]):
     """
     This will test and Plot schemes at distances
     """
+    
     for d in dists:
+        h1 = genRingPCM(d)
+        h2 = genRingPCM(d)
+        pcm = cHypergraph(h1,h2,d)
         ler = []
         per = [i/10 for i in range(10)]
         for p in per:
-            new_ler = lerCalc(genRepPCM,1000, d, p)
+            new_ler = lerCalc(pcm,1000, d, p)
             ler.append(new_ler)
         plt.plot(per, ler, label=f"rep {d}")
         # ler = []
@@ -89,4 +55,3 @@ def main(dists = [3, 9,50]):
 
 if __name__ == "__main__":
     main()
-    
