@@ -1,5 +1,5 @@
 import sys
-from clemlib.repcoderobj import *
+from conceptTinkering.repcoderobj import *
 word = Message("meinding")
 word.show()
 word.encode(3)

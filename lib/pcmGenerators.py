@@ -44,14 +44,13 @@ def cHypergraph(h1,h2,distance):
     """
     lhx = np.kron(h1, np.eye(distance))
     rhx = np.kron(np.eye(distance), h2.T)
-
-    hhx = np.concatenate((lhx,rhx), axis=1)
+    hx = np.concatenate((lhx,rhx), axis=1)
 
     lhz = np.kron(np.eye(distance), h2)
     rhz = np.kron(h1.T, np.eye(distance))
-    hhz = np.concatenate((lhz,rhz), axis=1)
+    hz = np.concatenate((lhz,rhz), axis=1)
     
-    hyper = np.kron(np.array([[1,0],
-                            [0,0]]),hhx) + np.kron(np.array([[0,0],[0,1]]),hhz)
-    return hyper
+    hyper = np.kron(np.array([[1,0],[0,0]]),hx) + np.kron(np.array([[0,0],[0,1]]),hz)
+    ## Just putting hx in top left and hz in bottom right
+    return hx, hz
 

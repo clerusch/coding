@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from pymatching import Matching
-from pcmGenerators import genRingPCM, genRepPCM, cHypergraph
+from lib.pcmGenerators import genRingPCM, genRepPCM, cHypergraph
+from lib.helperrank import rankmod2, rref_mod_2
 
-def lerCalc(pcm, nr = 100, dist = 5, per = 0.3):
+def lerCalc(hx, hz, nr = 100, dist = 5, per = 0.3):
     """
     Calculates a logical error rate of dist code assuming specific physical error rate
 
@@ -16,42 +17,48 @@ def lerCalc(pcm, nr = 100, dist = 5, per = 0.3):
     Returns:
         ler(Float):        Logical error rate of coding scheme with given parameters
     """
-    matching = Matching(pcm)
+    matchingx = Matching(hx)
+    matchingz = Matching(hz)
+    rhx = rankmod2(hx)
+    rhz = rankmod2(hz)
     nle = 0
     for _ in range(nr):
-        error = (np.random.rand(4*dist**2) < per).astype(np.uint8)
-        syndrome = (pcm@error) % 2
-        corr = matching.decode(syndrome)
-        res = (corr + error) % 2
-        if sum(res) > 0:
+        errorx = (np.random.rand(2*dist**2) < per).astype(np.uint8)
+        syndromex = (hx@errorx) % 2
+        corrx = matchingx.decode(syndromex)
+        resx = (corrx + errorx) % 2
+        errorz = (np.random.rand(2*dist**2) < per).astype(np.uint8)
+        syndromez = (hz@errorz) % 2
+        corrz = matchingz.decode(syndromez)
+        resz = (corrz + errorz) % 2
+        if rhx != rankmod2(np.vstack([hx,resx])) or rhz != rankmod2(np.vstack([hz,resz])):
             nle += 1
+            print(corrx,errorx,resx)
+            print(np.sum(resx))
+            print(corrz,errorz,resz)
+            print(np.sum(resz))
     ler = nle/nr
     return ler
 
-def main(dists = [5,9,11]):
+def main(dists = [5]):
     """
     This will test and Plot schemes at distances
     """
-    
     for d in dists:
         h1 = genRingPCM(d)
         h2 = genRingPCM(d)
-        pcm = cHypergraph(h1,h2,d)
+        hx, hz = cHypergraph(h1,h2,d)
         ler = []
-        per = [i/10 for i in range(10)]
+        pmax = .02
+        per = np.linspace(0,pmax,10)
         for p in per:
-            new_ler = lerCalc(pcm,1000, d, p)
+            new_ler = lerCalc(hx, hz,2000, d, p)
             ler.append(new_ler)
-        plt.plot(per, ler, label=f"rep {d}")
-        # ler = []
-        # per = [i/10 for i in range(10)]
-        # for p in per:
-        #     new_ler = lerCalc(genRingPCM,1000, d, p)
-        #     ler.append(new_ler)
-        # plt.plot(per, ler, label=f"ring {d}")
+        plt.plot(per, ler, label=f"tor {d}")
+    x = [0,pmax]
+    plt.plot(x,x)
     plt.legend()
-    plt.show()
-
+    plt.savefig("./toric.png")
 
 if __name__ == "__main__":
     main()

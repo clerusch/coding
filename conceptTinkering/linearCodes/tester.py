@@ -1,6 +1,6 @@
 import sys
 from mpl_toolkits import mplot3d
-from clemlib.repcoder import *
+from conceptTinkering.linearCodes.repcoder import *
 
 def fidelity(noises:list[float], codelengths:list[int]):
     fidelities = []
