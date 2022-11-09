@@ -1,7 +1,10 @@
 import numpy as np
 ## lets decode a logical 0 or 1
 
-m = np.array([[1,1,0,0,0],[0,1,1,0,0],[0,0,1,1,0],[0,0,0,1,1]])
+m = np.array([[1,1,0,0,0],
+              [0,1,1,0,0],
+              [0,0,1,1,0],
+              [0,0,0,1,1]])
 actual = np.array([0,1,0,0,0])
 #print(m@actual)
 
