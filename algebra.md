@@ -26,13 +26,12 @@ The fourth and fitfth bit are called ancilla bits and tell us where error occure
 
 - Ancillas are responsible for syndrome extraction
 - Repetition code:
-    - E.g. Distance 3 X rep code stabilised by ZZII, IZZI, IIZZ
+    - E.g. Distance 3 X rep code stabilised by ZZI, IZZ
     - Connect each except border ancillas to 2 data qubits in such a way that data qubit leaving codespace leads to ancilla collapsing into 1.
     ![](./img/repcodeWithSyndrome.png)
         Distance 5 Repetition Code with 2 bitflip errors generating a syndrome.
         
 - Ringcode
-    - E.g. Distance 3 X ring code stabilised by Z
     - The Ringcode requires 1 fewer ancillas to operate, however it or its higher dimensional equivalents like the toric code are harder to implement due to the need for long-distance gates
     ![](./img/ringCodeWithSyndrome.png)
     - Distance 5 Ring Code with 2 bitflip errors generating a syndrome.
