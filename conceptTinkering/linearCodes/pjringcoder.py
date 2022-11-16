@@ -18,13 +18,13 @@ def calc_ler(n_runs, distance,per):
     return(n_logical_errors/n_runs)
 
 calc_ler(1000, 5, 0.3)
-# for d in [3,5,9]:
-#     ler = []
-#     per = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
-#     for p in per:
-#         ler_new = calc_ler(1000,d,p)
-#         ler.append(ler_new)
-#     plt.plot(per, ler,label=d)
+for d in [3,5,9]:
+     ler = []
+     per = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
+     for p in per:
+         ler_new = calc_ler(1000,d,p)
+         ler.append(ler_new)
+     plt.plot(per, ler,label=d)
 plt.legend()
 plt.show()
 
