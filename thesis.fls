@@ -1,7 +1,7 @@
 PWD /home/clemens/Nextcloud/bachelor/coding
 INPUT /usr/share/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/clemens/Nextcloud/bachelor/coding/thesis.tex
+INPUT thesis.tex
 OUTPUT thesis.log
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls
