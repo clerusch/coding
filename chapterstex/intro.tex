@@ -25,113 +25,24 @@ In this picture we can introduce quantum circuit diagram notation, whereby:
 \end{figure}
 \newpage
 
-In the quantum circuit depicted in figure \ref{fig:circuit1} the input
-state can be written as $|\psi_{control}\rangle \otimes |0\rangle 
-\otimes |\psi_{target}\rangle$ and the measurement in the first 
-timestep can be expressed as $\mathbb{I}\otimes X \otimes X$.\\
-To simplify calculation we can write $|\psi_{target}\rangle$ as
-$\alpha |0\rangle + \beta |1\rangle$%, where $|+\rangle,|-\rangle$ are
-%the +1 and -1 Eigenstates of the $\sigma_x$-matrix. \\
-\\
-The input state is thus: 
-$|\psi_{control}\rangle \otimes |0\rangle 
-\otimes( \alpha |0\rangle + \beta |1\rangle)$.\\
-The initial state $|\phi_{t=0}\rangle$ = $|\psi_{control}\rangle \otimes |\psi_{ancilla}\rangle \otimes
-|\psi_{target}\rangle$\\
-where\\
-$|\psi_{control}\rangle = \alpha|0\rangle+\beta|1\rangle$
-\\
-$|\psi_{ancilla}\rangle = |0\rangle$
-\\
-$|\psi_{target}\rangle = \gamma|0\rangle+\delta|1\rangle$
-\\
-therefore:
+As can be seen explicitly calculated in the familiar Schroedinger 
+picture in Appendix \ref{sec:calc1}, the circuit from figure 
+\ref{fig:circuit1} implements a 
+CNOT-gate from the control qubit to the target qubit.
+
+We will now analyze this circuit in the Heisenberg picture,
+finding that it results in an equivalent result.
+
+\subsubsection{Heisenberg Picture}
+In this picture, we focus on the time evolution of operators instead
+of states:
 \begin{equation}
-|\phi_{t=0}\rangle = \alpha \left( \gamma |000\rangle + \delta |001\rangle\right)+
-\beta \left( \gamma |100\rangle + \delta |101\rangle \right)
+	A = A(t)
 \end{equation}
-If the first measurement result is +1, the state becomes:
-\begin{align*}
-	|\phi^{+}_{t=1}\rangle 
-	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}+
-	\mathbb{I}\otimes X \otimes X\right)|\phi_{t=0}\rangle\\
-	&= \alpha \left( 
-	\gamma \left( |000\rangle + |011\rangle \right) +
-	\delta \left( |001\rangle + |010\rangle \right) \right) \\
-	&+ \beta \left(
-	\gamma \left( |100\rangle + |111\rangle \right) +
-	\delta \left( |101\rangle + |110\rangle \right) \right)
-\end{align*}
-if the result is -1, it becomes:
-\begin{align*}
-	|\phi^{-}_{t=1}\rangle 
-	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}-
-	\mathbb{I}\otimes X \otimes X\right)|\phi_{t=0}\rangle\\
-	&= \alpha \left( 
-	\gamma \left( |000\rangle - |011\rangle \right) +
-	\delta \left( |001\rangle - |010\rangle \right) \right) \\
-	&+ \beta \left(
-	\gamma \left( |100\rangle - |111\rangle \right) +
-	\delta \left( |101\rangle - |110\rangle \right) \right)
-\end{align*}
-
-In the case of the +1 Measurement $\rightarrow$ a=0:
-\begin{align*}
-	|\phi^{++}_{t=2}\rangle 
-	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}+
-	Z\otimes Z \otimes \mathbb{I}\right)|\phi^{+}_{t=1}\rangle\\
-	&= (|000\rangle\langle000| +|001\rangle\langle001| +
-	|110\rangle\langle110| +|111\rangle\langle111|)|\phi^{+}_{t=1}\rangle\\
-	&= \alpha \left( \gamma |000\rangle + \delta |001\rangle \right)
-	+ \beta \left( \gamma |111\rangle + \delta |110\rangle\right) 
-\end{align*}
-\begin{align*}
-	|\phi^{+-}_{t=2}\rangle 
-	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}-
-	Z \otimes Z \otimes \mathbb{I}\right)|\phi^{+}_{t=1}\rangle\\
-	&= (|010\rangle\langle010| +|011\rangle\langle011| +
-	|100\rangle\langle100| +|101\rangle\langle101|)|\phi^{+}_{t=1}\rangle\\
-	&= \alpha \left( \gamma |011\rangle + \delta |010\rangle \right)
-	+ \beta \left( \gamma |100\rangle + \delta |101\rangle \right) 
-\end{align*}
-In the case of the -1 Measurement $\rightarrow$ a=1:
-\begin{align*}
-	|\phi^{-+}_{t=2}\rangle 
-	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}+
-	Z\otimes Z \otimes \mathbb{I}\right)|\phi^{-}_{t=1}\rangle\\
-	&= \alpha \left( \gamma |000\rangle + \delta |001\rangle \right)
-	- \beta \left( \gamma |111\rangle + \delta |110\rangle\right) 
-\end{align*}
-\begin{align*}
-	|\phi^{--}_{t=2}\rangle 
-	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}-
-	Z\otimes Z \otimes \mathbb{I}\right)|\phi^{-}_{t=1}\rangle\\
-	&= - \alpha \left( \gamma |011\rangle + \delta |010\rangle \right)
-	+ \beta \left( \gamma |100\rangle + \delta |101\rangle \right) 
-\end{align*}
-Now the applied measurement is 
-$\mathbb{I} \otimes X \otimes \mathbb{I}$, which means:
-\begin{align*}
-	|\phi^{+++}_{t=3}\rangle 
-	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}+
-	\mathbb{I}\otimes X \otimes \mathbb{I}\right)|\phi^{++}_{t=2}\rangle\\
-	&= \frac{1}{2}((|010\rangle + |000\rangle)\langle000|
-	+ (|011\rangle + |001\rangle)\langle001|\\
-	&+ (|000\rangle + |010\rangle)\langle010|
-	+ (|001\rangle + |011\rangle)\langle011|\\
-	&+ (|110\rangle + |100\rangle)\langle100|
-	+ (|111\rangle + |101\rangle)\langle101|\\
-	&+ (|100\rangle + |110\rangle)\langle110|
-	+ (|101\rangle + |111\rangle)\langle111|)
-	|\phi^{++}_{t=2}\rangle\\
-	&= \frac{1}{2}(\alpha \left( 
-	\gamma (|000\rangle + |010\rangle)+
-	\delta (|011\rangle + |001\rangle) \right) \\
-	&+ \beta \left( 
-	\gamma (|101\rangle + |111\rangle)+
-	\delta (|100\rangle + |110\rangle) \right))
-\end{align*}
-In this case, a,b and c would each be zero, therefore no further gate would be applied.\\
-As intended, this state is equivalent to 
-$CNOT_{|\psi_{Control}\rangle\rightarrow |\psi_{Target}\rangle} |\phi_{t=0}\rangle$.
-
+By considering specifically the operators to which the input state
+space is part of those operators eigenstatespace, we can compute
+the output of any circuit:
+\begin{equation}
+	Circuit(|\phi\rangle) = Circuit(A)|\phi\rangle
+\end{equation}
+if $|\phi\rangle$ is an eigenstate of A.
