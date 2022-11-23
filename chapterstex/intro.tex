@@ -26,12 +26,11 @@ In this picture we can introduce quantum circuit diagram notation, whereby:
 \newpage
 
 As can be seen explicitly calculated in the familiar Schroedinger 
-picture in Appendix \ref{sec:calc1}, the circuit from figure 
-\ref{fig:circuit1} implements a 
-CNOT-gate from the control qubit to the target qubit.
+picture in Appendix~\ref{sec:calc1}, the circuit from figure~\ref{fig:circuit1}
+implements a CNOT-gate from the control qubit to the target qubit.
 
 We will now analyze this circuit in the Heisenberg picture,
-finding that it results in an equivalent result.
+finding that it results in an equal output.
 
 \subsubsection{Heisenberg Picture}
 In this picture, we focus on the time evolution of operators instead
@@ -45,4 +44,26 @@ the output of any circuit:
 \begin{equation}
 	Circuit(|\phi\rangle) = Circuit(A)|\phi\rangle
 \end{equation}
-if $|\phi\rangle$ is an eigenstate of A.
+if $|\phi\rangle$ is an eigenstate of A.\\
+We call an operator/gate, to which an input state is an eigenvector the 
+``Stabilizer'' of that input state. \\
+The ``Stabilizer group'' is a group of such operators, comprising the
+Stabilizers that stabilize all allowed input states \\
+So e.g.\ the input state in figure~\ref{fig:circuit1} is only 
+stabilized by $\mathbb{I} \otimes Z \otimes \mathbb{I}$ 
+(and trivially $\mathbb{I} \otimes \mathbb{I} \otimes \mathbb{I}$).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
