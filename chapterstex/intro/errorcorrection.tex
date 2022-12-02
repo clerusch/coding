@@ -3,7 +3,7 @@ One of the big challenges of physically realising a quantum
 computer is its subjection to noise in the real world.
 Unlike classical computers, the type of error is not limited
 to a bitflip, as even single qubit states have a theoretically
-infinit amount of differing states to it on a bloch sphere,
+infinite amount of differing states to it on a bloch sphere,
 and therefore an infinite amount of types of errors can have
 occured in the presence of noise such as thermal or electromagnetical
 noise.
@@ -11,7 +11,7 @@ noise.
 Fortunately, this noise can be modeled as successive pauli gates.
 Since an identity noise occuring is irrelevant to us, and XY as
 well as ZY (anti-) commute, we need only correct for X and Z
-errors occuring. 
+errors occuring in order to correct any pauli errors. 
 
 \subsubsection{Repetition Code}
 In order to correct errors, they must first be detected.
@@ -20,50 +20,72 @@ codes, such as the repetition code.
 For this error code information is encoded by repeating the 
 intended message some amount of times, and then decoding it
 by performing a majority vote on the transmitted message.
+In Quantum error correction, we speak of [[n,k,d]] stabilizer
+codes if an encoding scheme allows for n physical qubits to 
+encode k logical qubits to a distance d.
 
 A quantum equivalent of the 3-bit repetition code performed on
-the message $|1\rangle$ is depicted in 
+the message $|1\rangle$ is is the [[3,1,$\frac{1}{2}$]] repetition
+code depicted in 
 figure~\ref{fig: syndrome extractor}, including so-called
-``Syndrome Extraction''. A Syndrome is a message that indicates
-the location of error occurences in a multi-physical-qubit
-system. It is crucial that the measurement-based extraction of
-such Syndromes occurs without harming the actual quantum 
-information stored in the so-called ``data-qubits''. Therefore
-two additional ``Ancilla-qubits'' (both $|0\rangle$) are
-attached to the circuit via CNOTs.
-\begin{figure}[h!]
+``Syndrome Extraction''. A Syndrome is a stabilizer that can be
+measured in order to detect wether and where an error has occured
+in a multi-qubit system. It is crucial that the 
+measurement of such Syndromes occurs without harming the actual
+quantum information stored in the ``data-qubits''. Therefore
+two additional ``Ancilla-qubits'' (both initialized to 
+$|0\rangle$) are attached to the circuit via CNOTs.
+This circuit is stabilized by IZZ and ZZI, measured by ancilla 
+1/2. The measurement result will therefore be a vector of length
+two, with each entry either being +1 or -1. To simplify the 
+algebra this will be changed to the binary representation of 0 
+for +1 and 1 for -1. 
+
+To represent the code, Stabilizers can be stacked together to
+a so-called parity-check-matrix, which satisfies:
+\newpage
+\begin{figure}
 	\begin{center}
 \includegraphics[scale=0.2]{./img/bitflipSyndromeExtraction3Rep.png}\\
 	\caption{Bitflip Syndrome extractor\\
         +1 measurement result on first Ancilla indicates a bitflip error
         on qubits 1 or 2, +1 result on second ancilla indicates 
-        bitflip on third or fourth qubit}
+        bitflip on second or third qubit}
 	\label{fig: syndrome extractor}
 	\end{center}
 \end{figure}
 \\
+
 This way of encoding information however leaves two notable
-issues.
+issues:
 
 For one, it only detects bitflip, or pauli-X errors occuring on
-the stored quantum information. While using Hadamard gate one
+the stored quantum information. While using Hadamard gates one
 could trivially adapt this code to instead detect pauli-Z errors,
 it is not possible to use linear codes like the repetition code
-to $\em{simultaneously}$ detect pauli-X and pauli-Z errors occuring.
+to $simultaneously$ detect pauli-X and pauli-Z errors occuring.
 
 Secondly, it also assumes a noise model of a ``Noisy Channel'',
 which is not compatible with the actually encountered errors in
 real physical quantum computers.
 
 \subsubsection{2D Codes}
-Again, the previous research in computer science is of immense
-value to us here, providing a toolset for generating valid codes
+Previous research in computer science 
+provides a toolset for generating valid codes
 from existing encoding schemes. 
-According to SUCHANDSUCH a hypergraph product code of two 
+Hypergraph product codes, introduced by Tillich and Z\'emor,
+of two 
 existing codes will always remain a valid detection code.
-We can therefore form hypergraph product code of two repetition
+We can therefore form a hypergraph product code of two repetition
 codes for X error detection and Z error detection respectively,
-obtaining the so-called ``Surface-Code'' which can detect
-$both$ X and Z errors, and therefore any pauli error happening.
+obtaining the [[$d^2$,1,d]]``Surface-Code'' which can detect up
+to d of $both$ X and Z errors, and 
+therefore any pauli error happening.
+
+The parity check matrix of a hypergraph product code is generated
+by the parity check matrices of two valid codes in the following
+way:
+
+
 
 PUT IN A NICE DRAWING OF THE SURFACE CODE.
