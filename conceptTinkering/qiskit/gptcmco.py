@@ -1,6 +1,7 @@
 #import qiskit
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 from qiskit import execute, Aer
+import matplotlib.pyplot as plt
 
 #create quantum and classical registers
 q = QuantumRegister(2)
@@ -22,3 +23,5 @@ qc.z(q[1]).c_if(c, 2)
 
 #draw the circuit
 qc.draw(output='mpl')
+plt.plot()
+plt.savefig("./bla.png")
