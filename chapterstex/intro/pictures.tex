@@ -16,7 +16,8 @@ In this picture we can introduce quantum circuit diagram notation, whereby:
 \end{itemize}
 \begin{figure}[h!]
 	\begin{center}
-\includegraphics[scale=0.5]{img/cnotMeasureCircuit.png}\\
+	\captionsetup{justification=centering,margin=2cm}
+	\includegraphics[scale=0.4]{img/cnotMeasureCircuit.png}\\
 	\caption{A Quantum Circuit to implement a measurement based\\
 		Controlled-$X_{|\psi\rangle_{control}\rightarrow |\psi\rangle_{target}}$ Gate,
 		where $|0\rangle$ is the +1 eigenstate in $\sigma_{z}$-basis.}
@@ -25,7 +26,7 @@ In this picture we can introduce quantum circuit diagram notation, whereby:
 \end{figure}
 \newpage
 
-As can be seen explicitly calculated in the familiar Schroedinger 
+As can be seen explicitly calculated in the Schroedinger 
 picture in Appendix~\ref{sec:calc1}, the circuit from figure~\ref{fig:circuit1}
 implements a CNOT-gate from the control qubit to the target qubit.
 
@@ -183,8 +184,4 @@ The stabilizer for the control and target qubit are still
 identity, and logical $\overline{Z}: ZIZ \rightarrow IIZ$.
 
 Since CNOT takes: $Z\otimes Z \rightarrow I \otimes Z$, this 
-implements a logical CNOT.
-
-
-
-
+implements a logical CNOT from the first to the third qubit.

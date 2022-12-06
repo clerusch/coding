@@ -24,6 +24,18 @@ In Quantum error correction, we speak of [[n,k,d]] stabilizer
 codes if an encoding scheme allows for n physical qubits to 
 encode k logical qubits to a distance d.
 
+\begin{figure}[h!]
+	\begin{center}
+	\captionsetup{justification=centering,margin=2cm}
+	\includegraphics[scale=0.2]{./img/bitflipSyndromeExtraction3Rep.png}\\
+	\caption{Bitflip Syndrome extractor\\
+        +1 measurement result on first Ancilla indicates a bitflip error
+        on qubits 1 or 2, +1 result on second ancilla indicates 
+		bitflip on second or third qubit}
+	\label{fig: syndrome extractor}
+	\end{center}
+\end{figure}
+
 A quantum equivalent of the 3-bit repetition code performed on
 the message $|1\rangle$ is is the [[3,1,$\frac{1}{2}$]] repetition
 code depicted in 
@@ -43,18 +55,22 @@ for +1 and 1 for -1.
 
 To represent the code, Stabilizers can be stacked together to
 a so-called parity-check-matrix, which satisfies:
-\newpage
-\begin{figure}
-	\begin{center}
-\includegraphics[scale=0.2]{./img/bitflipSyndromeExtraction3Rep.png}\\
-	\caption{Bitflip Syndrome extractor\\
-        +1 measurement result on first Ancilla indicates a bitflip error
-        on qubits 1 or 2, +1 result on second ancilla indicates 
-        bitflip on second or third qubit}
-	\label{fig: syndrome extractor}
-	\end{center}
-\end{figure}
-\\
+\begin{equation}
+	M_{pc}\cdot \vec{v}_{error} = \vec{v}_{syndrome}
+\end{equation}
+So e.g. the parity check matrix for the $[3,1,\frac{1}{2}]$
+repetition code would be:
+
+\begin{equation}
+	M_{pc3} = \left( 
+	\begin{array}{ccc}
+		1 & 1 & 0 \\
+		0 & 1 & 1
+	\end{array}
+	\right)
+\end{equation}
+And the syndrome for an X error on the first qubit would be
+$\left(\begin{array}{c}1\\0\end{array}\right)$.
 
 This way of encoding information however leaves two notable
 issues:
@@ -68,7 +84,7 @@ to $simultaneously$ detect pauli-X and pauli-Z errors occuring.
 Secondly, it also assumes a noise model of a ``Noisy Channel'',
 which is not compatible with the actually encountered errors in
 real physical quantum computers.
-
+\newpage
 \subsubsection{2D Codes}
 Previous research in computer science 
 provides a toolset for generating valid codes
@@ -85,7 +101,11 @@ therefore any pauli error happening.
 The parity check matrix of a hypergraph product code is generated
 by the parity check matrices of two valid codes in the following
 way:
+\begin{equation}
+	H = \left(\begin{array}{cc}
+		M_{pcX} & 0 \\
+		0 & M_{pcZ} \\
+	\end{array}\right)
+\end{equation}
 
-
-
-PUT IN A NICE DRAWING OF THE SURFACE CODE.
+PUT IN A NICE VISUALISATION OF THE SURFACE CODE.
