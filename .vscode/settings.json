@@ -1,5 +1,11 @@
 {
     "files.associations": {
         "iostream": "c"
-    }
+    },
+    "grammarly.selectors": [
+        {
+            "language": "latex",
+            "scheme": "file"
+        }
+    ]
 }

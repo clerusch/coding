@@ -1,15 +1,15 @@
 \subsection{Error detection and correction}
 \subsubsection{Error Model}
-One of the big challenges of physically realising a quantum 
+One of the big challenges of physically realizing a quantum 
 computer is its subjection to noise in the real world.
 Unlike classical computers, the type of error is not limited
 to a bitflip, as even single qubit states have a theoretically
-infinite amount of differing states to it on a bloch sphere,
+infinite amount of differing states to it on a Bloch sphere,
 and therefore an infinite amount of types of errors can have
-occured in the presence of noise such as thermal or electromagnetical
+occurred in the presence of noise such as thermal or electromagnetic
 noise.
 
-Fortunately, this noise can be modeled as a sum of pauli gates.
+Fortunately, this noise can be modeled as a sum of Pauli gates.
 Any single qubit error operator matrix E can be written as:
 \begin{equation}
     E =
@@ -27,23 +27,23 @@ error $E|\psi\rangle$ will be $\mathbb{I}$; with probability $\beta$ its effect
 will be X, and so on.
 
 Therefore it is sufficient to determine which of these errors $\mathbb{I}$, 
-X, Y, Z has occured, and we can apply the same operator again to return to the 
+X, Y or Z has occurred, and we can apply the same operator again to return to the 
 initial state.
-Since an identity noise occuring is irrelevant to us, and XY as
+Since an identity noise occurring is irrelevant to us, and XY as
 well as ZY (anti-) commute, we need only detect for X and Z
-errors occuring in order to detect any single qubit errors. 
+errors occurring in order to detect any single qubit errors. 
 
 
 \subsubsection{Repetition code}
-In order to correct errors, they must first be detected.
 From classical computer science there are well known existing
 codes, such as the repetition code.
 For this error code information is encoded by repeating the 
 intended message some amount of times, and then decoding it
 by performing a majority vote on the transmitted message.
-In Quantum error correction, we speak of [[n,k,d]] stabilizer
-codes if an encoding scheme allows for n physical qubits to 
-encode k logical qubits to a distance d.
+In Quantum error correction, we speak of $[[n,k,d]]$ stabilizer
+codes if an encoding scheme allows for $n$ physical qubits to 
+encode $k$ logical qubits to an error distance of $d$, i.e. $d$ individual errors 
+being corrigible.
 
 \begin{figure}[h!]
 	\begin{center}
@@ -61,12 +61,12 @@ A quantum equivalent of the 3-bit repetition code performed on
 the message $|1\rangle$ is is the [[3,1,$\frac{1}{2}$]] repetition
 code depicted in 
 figure~\ref{fig: syndrome extractor}, including so-called
-``Syndrome Extraction''. A Syndrome is a stabilizer that can be
-measured in order to detect wether and where an error has occured
+$syndrome\ extraction$. A syndrome is a stabilizer that can be
+measured to detect whether and where an error has occurred
 in a multi-qubit system. It is crucial that the 
-measurement of such Syndromes occurs without harming the actual
-quantum information stored in the ``data-qubits''. Therefore
-two additional ``Ancilla-qubits'' (both initialized to 
+measurement of such syndromes occurs without harming the actual
+quantum information stored in the $data-qubits$. Therefore
+two additional $ancilla-qubits$ (both initialized to 
 $|0\rangle$) are attached to the circuit via CNOTs.
 This circuit is stabilized by IZZ and ZZI, measured by ancilla 
 1/2. The measurement result will therefore be a vector of length
@@ -96,11 +96,11 @@ $\left(\begin{array}{c}1\\0\end{array}\right)$.
 This way of encoding information however leaves two notable
 issues:
 
-For one, it only detects bitflip, or pauli-X errors occuring on
+For one, it only detects bitflip, or Pauli-X errors occuring on
 the stored quantum information. While using Hadamard gates one
-could trivially adapt this code to instead detect pauli-Z errors,
+could trivially adapt this code to instead detect Pauli-Z errors,
 it is not possible to use linear codes like the repetition code
-to $simultaneously$ detect pauli-X and pauli-Z errors occuring.
+to $simultaneously$ detect Pauli-X and Pauli-Z errors occurring.
 
 Secondly, it also assumes a noise model of a ``Noisy Channel'',
 which is not compatible with the actually encountered errors in
