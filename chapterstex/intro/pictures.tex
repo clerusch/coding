@@ -35,16 +35,17 @@ finding that it results in an equal output.
 
 \subsection{Heisenberg Picture and stabilizer Formalism}
 \subsubsection{Stabilizer Group}
-We call an operator/gate S, to which the input state is an 
-eigenvector ($S|\psi\rangle=|\psi\rangle$), a ``stabilizer'' of that input state. \\
-The ``stabilizer group'' is a generating subset of the set
-of such operators.
+We call an operator/gate S, to which the input state is an
+eigenvector ($S|\psi\rangle=|\psi\rangle$), a $stabilizer$ of that input state. \\
 
-We write these stabilizers as tensor-products of pauli operators
-$P \in P_{G}$,
+
+For $n$-qubit systems, we write these stabilizers as $n$-tensor-products 
+of pauli operators $P \in P_{G}$,
 where pauli operators are the operators on $\mathbb{F}_{2}$ such that:
 
-$\forall P\in P_{G}, n\in \mathbb{N}: P^{2n}=\mathbb{I}$.
+\begin{equation}
+    \forall P\in P_{G}, n\in \mathbb{N}: P^{2n}=\mathbb{I}.
+\end{equation}
 
 In the Heisenberg picture, stabilizers are tracked instead of
 states. 
@@ -90,27 +91,27 @@ Therefore $S'_{G} = \langle AS_{0}A^{\dagger},...,AS_{n}A^{\dagger}\rangle$.
 %all $S' \in S'_{G}$ for which $\exists J' \in S'_{G}: \{S',J'\}=0$
 
 \subsubsection{Effect of measurements on stabilizers}
-A pauli measurement operator M can either commute with all stabilizer
-operators, in which case M itself is a stabilizer already and the
+A pauli measurement operator $M$ can either commute with all stabilizer
+operators, in which case $M$ itself is a stabilizer already and the
 measurement has no effect on the state, or anticommute with at
 least one operator in $S_{G}$, since pauli operators as well as
 their tensor-products can only commute or anti-commute with each
-other.
+other. The product of two operators which both anticommute with another operator
+will then commute with that operator.
 
-In that case, to obtain the new stabilizers  $S'_{G}$, proceed
-as follows:
-\begin{itemize}
-	\item Identify $S\in S_{G}: {S,M}=0$
+So in order to obtain the new stabilizers  $S'_{G}$:
+\begin{enumerate}
+	\item Identify $S\in S_{G}: \{S,M\}=0$
 	\item Remove S from $S_G$
 	\item Add $M$ to $S_G$ 
 	\item for $N \in S_G \cup\overline{X}\cup\overline{Z}:$
-		if $\{N,M\}==0: N=SN$ 
-\end{itemize}
+		if $\{N,M\}=0$: replace N with SN
+\end{enumerate}
 where $\overline{X}$ and $\overline{Z}$ are the sets of 
-logical Xs and Zs respectively.
+logical X and Z operators respectively.
 
 \subsubsection{Circuit Analysis in Stabilizer formalism}
-After a measurement M, an n qubit input state will always 
+After a measurement $M$, an $n$ qubit input state will always 
 collapse into either the +1 or the -1 eigenstate of the 
 measurement operator.
 
@@ -137,8 +138,7 @@ $\overline{Z}$ operator is ZIZ.
 After the first Measurement, the state is stabilized by 
 IXX, since it collapses into an eigenstate of the measurement 
 operator. Notably, if the measurement operator M anticommutes
-with some element of the stabilizer S:% $P^{+}_{1}$ and
-%$P^{-}_{1}$ have the same stabilizers, since:
+with some element of the stabilizer S:
 
 \begin{equation}
 	SP_{-}S^{\dagger} = \frac{1}{2}S\left( 
@@ -164,7 +164,7 @@ either commute or anti-commute).
 In our case, IZI and IXX anticommute,
 so now the state is stabilized by $S^{1}_{G} = \langle IXX
 \rangle$. Both initial logical operators commute with the first
-measurement operator, so are left unchanged.
+measurement operator, so they are left unchanged.
 
 After the second measurement $M_{2}$=ZZI, since this
 measurement anticommutes with the IXX stabilizer, the new 
@@ -183,5 +183,5 @@ measurement operator.
 The stabilizer for the control and target qubit are still
 identity, and logical $\overline{Z}: ZIZ \rightarrow IIZ$.
 
-Since CNOT takes: $Z\otimes Z \rightarrow I \otimes Z$, this 
+Since CNOT maps: $Z\otimes Z \mapsto I \otimes Z$, this 
 implements a logical CNOT from the first to the third qubit.
