@@ -1,0 +1,33 @@
+\subsection{Error Model}
+One of the big challenges of physically realizing a quantum 
+computer is its subjection to noise in the real world.
+Unlike classical computers, the type of error is not limited
+to a bitflip, as even single qubit states have an
+infinite amount of differing states to it on a Bloch sphere,
+and therefore an infinite amount of types of errors can have
+occurred in the presence of noise such as thermal or electromagnetic
+noise.
+
+Fortunately, this noise can be modeled as a sum of Pauli gates.
+Any single qubit error operator matrix E can be written as:
+\begin{equation}
+    E =
+    \left(
+    \begin{array}{cc}
+        a & b \\
+        c & d \\
+    \end{array}
+    \right) = 
+    \alpha \mathbb{I} + \beta X + \delta Y + \gamma Z
+\end{equation}
+With an apropriate choice of $\alpha, \beta, \gamma, \delta$.
+In effect, this means that with probability $\alpha$, the effect of the
+error $E|\psi\rangle$ will be $\mathbb{I}$; with probability $\beta$ its effect
+will be X, and so on.
+
+Therefore it is sufficient to determine which of these errors $\mathbb{I}$, 
+X, Y or Z has occurred, and we can apply the same operator again to return to the 
+initial state.
+Since an identity noise occurring is irrelevant to us, and XY as
+well as ZY (anti-) commute, we need only detect for X and Z
+errors occurring in order to detect any single qubit errors. 

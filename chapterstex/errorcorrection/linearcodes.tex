@@ -1,40 +1,4 @@
-\subsection{Error detection and correction}
-\subsubsection{Error Model}
-One of the big challenges of physically realizing a quantum 
-computer is its subjection to noise in the real world.
-Unlike classical computers, the type of error is not limited
-to a bitflip, as even single qubit states have a theoretically
-infinite amount of differing states to it on a Bloch sphere,
-and therefore an infinite amount of types of errors can have
-occurred in the presence of noise such as thermal or electromagnetic
-noise.
-
-Fortunately, this noise can be modeled as a sum of Pauli gates.
-Any single qubit error operator matrix E can be written as:
-\begin{equation}
-    E =
-    \left(
-    \begin{array}{cc}
-        a & b \\
-        c & d \\
-    \end{array}
-    \right) = 
-    \alpha \mathbb{I} + \beta X + \delta Y + \gamma Z
-\end{equation}
-With an apropriate choice of $\alpha, \beta, \gamma, \delta$.
-In effect, this means that with probability $\alpha$, the effect of the
-error $E|\psi\rangle$ will be $\mathbb{I}$; with probability $\beta$ its effect
-will be X, and so on.
-
-Therefore it is sufficient to determine which of these errors $\mathbb{I}$, 
-X, Y or Z has occurred, and we can apply the same operator again to return to the 
-initial state.
-Since an identity noise occurring is irrelevant to us, and XY as
-well as ZY (anti-) commute, we need only detect for X and Z
-errors occurring in order to detect any single qubit errors. 
-
-
-\subsubsection{Repetition code}
+\subsection{Repetition code}
 From classical computer science there are well known existing
 codes, such as the repetition code.
 For this error code information is encoded by repeating the 
@@ -105,28 +69,3 @@ to $simultaneously$ detect Pauli-X and Pauli-Z errors occurring.
 Secondly, it also assumes a noise model of a ``Noisy Channel'',
 which is not compatible with the actually encountered errors in
 real physical quantum computers.
-\newpage
-\subsubsection{2D codes}
-Previous research in computer science 
-provides a toolset for generating valid codes
-from existing encoding schemes. 
-Hypergraph product codes, introduced by Tillich and Z\'emor,
-of two 
-existing codes will always remain a valid detection code.
-We can therefore form a hypergraph product code of two repetition
-codes for X error detection and Z error detection respectively,
-obtaining the [[$d^2$,1,d]]``Surface-Code'' which can detect up
-to d of $both$ X and Z errors, and 
-therefore any pauli error happening.
-
-The parity check matrix of a hypergraph product code is generated
-by the parity check matrices of two valid codes in the following
-way:
-\begin{equation}
-	H = \left(\begin{array}{cc}
-		M_{pcX} & 0 \\
-		0 & M_{pcZ} \\
-	\end{array}\right)
-\end{equation}
-
-PUT IN A NICE VISUALISATION OF THE SURFACE CODE.

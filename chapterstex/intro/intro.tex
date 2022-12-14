@@ -1,9 +1,34 @@
-In the following we will give an overview of the utilized
-algebra in quantum information theory.\\
-To this end we must first return to the fundamentals of quantum
-mechanics.
+A quantum computer operates on so-called $qubits$, which can be
+anything that can be put into a sufficiently uncertain superposition
+state. Physical implementations of these include particles with 
+spin, as well as controlled EM-waves, i.e. lasers.
+In the following, we will give an overview of the utilized
+algebra and pictures through which to view quantum information theory.
+
+In the following we will analyze quantum circuit diagrams using the different
+pictures of quantum mechanics.
+A quantum circuit diagram is a visual representation of the computation done
+in a quantum computer, whereby:
+\begin{itemize}
+	\item States progress in time along horizontal parallel lines
+	\item Time goes from left to right
+	\item Gates denoted X,Y,Z are the single qubit pauli operators
+		$\sigma_x,\sigma_y,\sigma_z$
+	\item Gates can act on one or multiple qubits, whereby an X gate 
+		on qubit 1 in a 3-qubit system should be interpreted as:
+		\\$(X\otimes \mathbb{I} \otimes \mathbb{I}) (|\psi_1\rangle
+		\otimes |\psi_2\rangle \otimes |\psi_3\rangle)$
+\end{itemize}
+\begin{figure}[h!]
+	\begin{center}
+	\captionsetup{justification=centering,margin=2cm}
+	\includegraphics[scale=0.4]{img/cnotMeasureCircuit.png}\\
+	\caption{A Quantum Circuit to implement a measurement based\\
+		Controlled-$X_{|\psi\rangle_{control}\rightarrow |\psi\rangle_{target}}$ Gate,
+		where $|0\rangle$ is the +1 eigenstate in $\sigma_{z}$-basis.}
+	\label{fig:circuit1}
+	\end{center}
+\end{figure}
 \input{./chapterstex/intro/pictures}
 \newpage
 \input{./chapterstex/intro/clifford}
-\newpage
-\input{./chapterstex/intro/errorcorrection}
