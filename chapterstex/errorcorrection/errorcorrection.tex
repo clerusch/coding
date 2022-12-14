@@ -1,7 +1,19 @@
 
 \input{chapterstex/errorcorrection/errormodel}
 
-\input{chapterstex/errorcorrection/linearcodes}
-
+\subsection{Linear codes}
+From classical computer science there are well known existing
+encoding schemes, such as the repetition and ring code.
+We call these codes linear because their graph representations are
+linear, or one-dimensional. In Quantum error correction, we speak of $[[n,k,d]]$ stabilizer
+codes if an encoding scheme allows for $n$ physical qubits to 
+encode $k$ logical qubits to an error distance of $d$, i.e. $d$ individual errors 
+being corrigible.
+In the following I will refer to linear or classical codes as having a 
+distance of $\frac{1}{2}$, to indicate that they do not protect against an
+arbitrary single qubit error, but only against flips in one specific eigenbasis.
+\input{chapterstex/errorcorrection/repetitioncode}
+\input{chapterstex/errorcorrection/ringcode}
+\newpage
 \input{chapterstex/errorcorrection/2dcodes}
 
