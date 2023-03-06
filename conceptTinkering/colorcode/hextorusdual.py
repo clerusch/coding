@@ -135,13 +135,24 @@ def dual_of_three_colored_graph(graph):
     takes: nx graph with colored edges (does not edit it)
     returns: dual of that graph with colored edges and nodes
     """
-    dual = nx.graph()
-    for edge in graph.edges:
-        dual.add_node()
+    faces = nx.cycle_basis(graph)
+    for cycle in faces:
+        if len(cycle)!=6:
+            print(cycle)
+            faces.remove(cycle)
+    for i, face in enumerate(faces):
+        print(i)
+    # print(faces)
 
 def main():
-    origG = nx.hexagonal_lattice_graph(6, 8, periodic=True)
+    origG = nx.hexagonal_lattice_graph(4, 6, periodic=True)
+    pos = nx.get_node_attributes(origG, "pos")
+    nx.draw(origG, pos=pos)
+    plt.show()
     tor_hex48_color_encode(origG)
+    draw_graph_with_colored_edges(origG, "img/hexcolor/original.png")
+
+    dual_of_three_colored_graph(origG)
     G = triang_three_colored_graph(4,6)
     subr = subtile(G, "r")
     subr = relabel_graph(subr)

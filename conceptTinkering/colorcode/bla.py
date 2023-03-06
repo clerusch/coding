@@ -1,17 +1,24 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 
-# Create a graph with existing node attributes
-G = nx.Graph()
-G.add_node(1, color='red')
-G.add_node(2, color='green')
-G.add_node(3, color='blue')
+G = nx.Graph()  # Initialize a graph
 
-# Add new attributes to each node using add_nodes_from()
-new_attrs = {'size': 10, 'shape': 'circle'}
-for node in G.nodes():
-    G.nodes[node].update(new_attrs)
+# Add nodes
+G.add_node(0)
+G.add_node(1)
+G.add_node(2)
 
-# Print the node attributes
-for node, data in G.nodes(data=True):
-    print(node, data)
+# Add edges with attributes
+G.add_edge(0, 1, weight=1)
+G.add_edge(1, 2, weight=2)
+G.add_edge(2, 0, weight=3)
+
+# Add attributes to existing edge
+for u, v, attr in G.edges(data=True):
+    if (u, v) == (0, 1):
+        G[u][v]['color'] = 'red'
+
+# Print edges with attributes
+print("Edges with attributes:")
+for u, v, attr in G.edges(data=True):
+    print(f"({u}, {v}): {attr}")
+
