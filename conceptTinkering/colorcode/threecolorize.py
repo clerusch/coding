@@ -47,10 +47,10 @@ def three_colorize_a_black_graph(G):
             picked_color = random.sample(remaining_colors, 1)[0]
             G[first_node][second_node]['color'] = picked_color
 
-def tor_hex48_color_encode(G: nx.Graph,m=8,n=6):
+def tor_hex48_color_encode(G: nx.Graph,m=6,n=4):
     """
     G: nx Graph
-    n,m: how many by how many hexagon, default to 8 and 6
+    n,m: how many by how many hexagon, default to 6 and 4 like in delfosse
     """
     rgb_list = ['r', 'g', 'b']
     # initialize all edge colors to black
@@ -83,20 +83,20 @@ def tor_hex48_color_encode(G: nx.Graph,m=8,n=6):
             second_coordinate = (2*i+1,(j+1)%(2*m))
             G[first_coordinate][second_coordinate]['color'] = rgb_list[(1-j)%3]
 
+def make_a_base_graph(m=6,n=4) -> nx.Graph:
+    G = nx.hexagonal_lattice_graph(m, n, periodic=True)
+    colorize_graph_black(G)
+    tor_hex48_color_encode(G,m,n)
+    for node in G.nodes:
+        G.nodes[node]['color'] = 'black'
+    return G
+
 def main():
     G = nx.hexagonal_lattice_graph(6, 4, periodic=True)
     colorize_graph_black(G)
     draw(G, "img/hexcolor/original.png")
-    # while any(attr['color'] == 'black' for _, _, attr in G.edges(data=True)): 
-    #     print("I tried :(")
-    #     three_colorize_a_black_graph(G)
     tor_hex48_color_encode(G,6,4)
-    # G[(0,0)][(1,0)]['color'] = 'b'
-    # G[(2,0)][(3,0)]['color'] = 'b'
-    # G[(4,0)][(5,0)]['color'] = 'b'
     draw(G, "img/hexcolor/normal_colorizer.png")
-    # three_colorize_a_black_graph(G)
-    # draw(G)
 
 if __name__ == "__main__":
     main()

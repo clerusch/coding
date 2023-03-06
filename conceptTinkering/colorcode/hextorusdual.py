@@ -2,8 +2,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from pymatching import Matching
 from hextorus import tor_hex48_color_encode, draw_graph_with_colored_edges
+from threecolorize import make_a_base_graph
 import numpy as np
 import random
+from typing import List, FrozenSet
 
 def triang_three_colored_graph(m,n):
     """
@@ -130,36 +132,92 @@ def gen_syndrome_from_subgraph_error(graph, want_array=False):
     else:
         return graph
 
-def dual_of_three_colored_graph(graph):
+def find_6_loops(graph: nx.Graph) -> List[FrozenSet[any]]:
+    cycles = set()
+    for node in graph.nodes:
+        for node1 in graph.neighbors(node):
+            for node2 in graph.neighbors(node1):
+                for node3 in graph.neighbors(node2):
+                    for node4 in graph.neighbors(node3):
+                        for node5 in graph.neighbors(node4):
+                            for node6 in graph.neighbors(node5):
+                                if node6 == node:
+                                    cycles.add(frozenset([node, node1, node2, node3, node4, node5]))
+    faces = [cycle for cycle in cycles if len(cycle) == 6]
+    return faces
+
+def find_face_color(graph: nx.Graph, face: FrozenSet) -> str:
+    rgb = set(['r','g','b'])
+    boundary_colors = set()
+    for node in face:
+        for node2 in face:
+            if node2 in graph.neighbors(node):
+                boundary_colors.add(graph[node][node2]['color'])
+    face_color = rgb - boundary_colors
+    return face_color
+        
+
+def dual_of_three_colored_graph(graph: nx.Graph) -> nx.Graph:
     """
     takes: nx graph with colored edges (does not edit it)
     returns: dual of that graph with colored edges and nodes
     """
-    faces = nx.cycle_basis(graph)
-    for cycle in faces:
-        if len(cycle)!=6:
-            print(cycle)
-            faces.remove(cycle)
+    dual_graph = nx.Graph()
+    fakeone = relabel_graph(triang_three_colored_graph(4,6))
+    pos = nx.get_node_attributes(fakeone, 'pos')
+    faces = find_6_loops(graph)
+    # init nodes
     for i, face in enumerate(faces):
-        print(i)
-    # print(faces)
+        dual_graph.add_node(i, color = 'black')
+        dual_graph.nodes[i]['color'] = find_face_color(graph,face)
+    # prepare node colors
+    node_colors = [data['color'] for _, data in dual_graph.nodes(data=True)] 
+    for i in range(len(node_colors)):
+        if node_colors[i]:
+            node_colors[i] = node_colors[i].pop()
+    # connect nodes
+    for i, face in enumerate(faces):
+        otherfaces = faces[:i]+faces[((i+1)%(len(faces))):]
+        for j, face2 in enumerate(otherfaces):
+            lap_nodes = set(face & face2)
+            print(lap_nodes)
+            if lap_nodes:
+                # A three-colorable graph will only ever have two nodes between two faces
+                node1 = lap_nodes.pop()
+                node2 = lap_nodes.pop()
+                connecting_color = graph[node1][node2]['color']
+                dual_graph.add_edge(i,j, color = connecting_color)
+                
+                edge_colors = [dual_graph[u][v]['color'] for u, v in dual_graph.edges()]
+                nx.draw(dual_graph, pos = pos, node_color=node_colors, edge_color=edge_colors)
+                plt.savefig("img/hexcolor/bla.png")
+
+
+    return dual_graph
+
 
 def main():
-    origG = nx.hexagonal_lattice_graph(4, 6, periodic=True)
-    pos = nx.get_node_attributes(origG, "pos")
-    nx.draw(origG, pos=pos)
-    plt.show()
-    tor_hex48_color_encode(origG)
-    draw_graph_with_colored_edges(origG, "img/hexcolor/original.png")
-
-    dual_of_three_colored_graph(origG)
-    G = triang_three_colored_graph(4,6)
-    subr = subtile(G, "r")
-    subr = relabel_graph(subr)
-    subr = gen_error_for_subgraph(subr)
-    syndrome = gen_syndrome_from_subgraph_error(subr, want_array=True)
-    print(syndrome)
-    decode_subgraph(subr, syndrome)
+    origG = make_a_base_graph()
+    # draw_graph_with_colored_edges_and_nodes(origG, "img/hexcolor/original.png")
+    dual = dual_of_three_colored_graph(origG)
+    # draw_graph_with_colored_edges_and_nodes(dual, "img/hexcolor/dual.png")
+    # node_colors = [data['color'] for _, data in dual.nodes(data=True)] 
+    plt.figure()
+    pos = nx.spring_layout(dual)
+    node_colors = [data['color'] for _, data in dual.nodes(data=True)] 
+    for i in range(len(node_colors)):
+        node_colors[i] = node_colors[i].pop()
+    edge_colors = [dual[u][v]['color'] for u, v in dual.edges()]
+    nx.draw(dual, pos=pos, node_color=node_colors, edge_color=edge_colors)
+    plt.savefig("img/hexcolor/dual.png")
+    # dual_of_three_colored_graph(origG)
+    # G = triang_three_colored_graph(4,6)
+    # subr = subtile(G, "r")
+    # subr = relabel_graph(subr)
+    # subr = gen_error_for_subgraph(subr)
+    # syndrome = gen_syndrome_from_subgraph_error(subr, want_array=True)
+    # print(syndrome)
+    # decode_subgraph(subr, syndrome)
         
 if __name__ == "__main__":
     main()
