@@ -130,6 +130,8 @@ def subtile(Graph: nx.Graph, color: str) -> nx.Graph:
 
 def gen_syndrome_array(graph: nx.Graph) -> List[any]:
     syndrome = np.zeros(len(graph.nodes()), dtype= np.uint8)
+    # maybe something with enumerate here?
+    # idc i'm going home for now ttyl
     for node in graph.nodes:
         if graph.nodes[node]['fault_ids'] == 1:
             syndrome[node] = (syndrome[node]+1)%2
@@ -169,6 +171,7 @@ def main():
     draw_graph_with_colored_edges_and_nodes(dual_shower, "img/hexcolor/dual.png")
     for i, graph in enumerate([subr_shower, subg_shower, subb_shower]):      
         draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
+        print(decode_subtile(graph))
 
 if __name__ == "__main__":
     main()
