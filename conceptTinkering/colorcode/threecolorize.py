@@ -89,6 +89,7 @@ def make_a_base_graph(m=6,n=4) -> nx.Graph:
     tor_hex48_color_encode(G,m,n)
     for node in G.nodes:
         G.nodes[node]['color'] = 'black'
+        G.nodes[node]['fault_ids'] = 0
     return G
 
 def main():
