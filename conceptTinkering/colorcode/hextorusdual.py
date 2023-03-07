@@ -203,7 +203,6 @@ def dual_of_three_colored_graph(graph: nx.Graph) -> nx.Graph:
 
 def main():
     origG = make_a_base_graph()
-    draw_graph_with_colored_edges_and_nodes(triang_three_colored_graph(4,6), "img/hexcolor/triangshould.png")
     dual = dual_of_three_colored_graph(origG)
     ########## visualizing part
     draw_graph_with_colored_edges_and_nodes(dual, "img/hexcolor/dual.png")
