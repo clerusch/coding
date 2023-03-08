@@ -16,14 +16,24 @@ A folder "img/hexcolor/" will be created to save image files if it does not exis
 """
 
 def colorize_graph_black(G: nx.Graph) -> bool:
+    """
+    Args:
+        G(nx.Graph): some graph
+    Returns:
+        bool: wether it was successful in changing the graph object 
+              to all black edges.
+    """
     for u, v, attr in G.edges(data=True):
         G[u][v]['color'] = 'black'
     return True
 
 def tor_hex48_color_encode(G: nx.Graph,m: int=6,n: int=4) -> bool:
     """
-    G: nx Graph
-    n,m: how many by how many hexagon, default to 6 and 4 like in delfosse
+    Args:
+        G(nx.Graph): graph we want to encode with three colored faces
+        n,m: how many by how many hexagon, default to 6 and 4 like in delfosse
+    Returns:
+        bool: Success of graph object modification procedure
     """
     rgb_list = ['r', 'g', 'b']
     # initialize all edge colors to black
@@ -58,6 +68,13 @@ def tor_hex48_color_encode(G: nx.Graph,m: int=6,n: int=4) -> bool:
     return True
 
 def make_a_base_graph(m: int=6,n: int=4) -> nx.Graph:
+    """
+    Args:
+        m(int), n(int): desired dimension of faces on graph (m by n)
+    Returns:
+        G(nx.Graph): A basic color code graph of dimensions m by n
+                     with colored edges encircling opposite colored faces.
+    """
     G = nx.hexagonal_lattice_graph(m, n, periodic=True)
     colorize_graph_black(G)
     tor_hex48_color_encode(G,m,n)
@@ -68,7 +85,10 @@ def make_a_base_graph(m: int=6,n: int=4) -> nx.Graph:
 
 def draw_graph_with_colored_edges_and_nodes(G: nx.Graph, file: str=None, name: str=None) -> bool:
     """
-    Draws a graph who's nodes and edges have colors
+    Draws a graph who's nodes and edges have colors.
+    Options:
+        filename (str): save file to specified name (will plt.show() otherwise)
+        name (str): will create figure with specified name
     """
     pos = nx.get_node_attributes(G, 'pos')
     node_colors = [data['color'] for _, data in G.nodes(data=True)] 
@@ -89,10 +109,13 @@ def draw_graph_with_colored_edges_and_nodes(G: nx.Graph, file: str=None, name: s
         plt.show()
     return True
 
-def flag_color_graph(graph: nx.Graph, per=0.1) -> bool:
+def flag_color_graph(graph: nx.Graph, per: float=0.1) -> bool:
     """
-    Changes input graph such that with probability p
-    on each nodes errors happen
+    Args:
+        graph(nx.Graph): graph to be altered with errors on nodes
+        per(float): probability on error occuring on each node
+    Returns:
+        bool: Success of operation
     """
     for node in graph.nodes:
         if random()< per:
@@ -101,6 +124,11 @@ def flag_color_graph(graph: nx.Graph, per=0.1) -> bool:
     return True
 
 def find_6_loops(graph: nx.Graph) -> List[FrozenSet[any]]:
+    """
+    Args:
+        nx.Graph: input graph
+    Returns:
+        set[frozenset]: Topology of nodes comprising faces on input graph """
     cycles = set()
     for node in graph.nodes:
         for node1 in graph.neighbors(node):
@@ -115,6 +143,13 @@ def find_6_loops(graph: nx.Graph) -> List[FrozenSet[any]]:
     return faces
 
 def find_face_color(graph: nx.Graph, face: FrozenSet) -> str:
+    """
+    Args:
+        graph: graph on which face lies
+        face(set[nodes]): face to analyze
+    Returns:
+        color(str): color of face
+    """
     rgb = set(['r','g','b'])
     boundary_colors = set()
     for node in face:
@@ -127,8 +162,10 @@ def find_face_color(graph: nx.Graph, face: FrozenSet) -> str:
         
 def dual_of_three_colored_graph(graph: nx.Graph) -> nx.Graph:
     """
-    takes: nx graph with colored edges (does not edit it)
-    returns: dual of that graph with colored edges and nodes
+    Args:
+        graph(nx.Graph): graph of which we want the dual 
+    Returns:
+        dual_graph(nx.Graph): the dual of that graph
     """
     dual_graph = nx.Graph()
     faces = find_6_loops(graph)
@@ -163,9 +200,12 @@ def dual_of_three_colored_graph(graph: nx.Graph) -> nx.Graph:
 
 def subtile(Graph: nx.Graph, color: str) -> nx.Graph:
     """
-    Graph: nx Graph
-    Color: color in format "r","g", "b"
-    Returns: tiled graph (does not edit original)
+    Args:
+        Graph(nx.Graph): graph we want to subtile
+        color(str): color in format "r","g", "b" of which all edges
+                    in the subtiling will be comprised
+    Returns: 
+        G(nx.Graph): subtiled graph (does not edit original object)
     """
     G = Graph.copy()
     for edge in G.edges:
@@ -177,8 +217,10 @@ def subtile(Graph: nx.Graph, color: str) -> nx.Graph:
 
 def decode_subtile(graph: nx.Graph) -> List[any]:
     """
-    churns out an error edges prediction from syndrome fault_ids
-    on a graph
+    Args:
+        graph(nx.Graph): graph with "fault_ids" property on some nodes
+    Returns:
+        prediction(List[edges]): predicted error edges on graph
     """
     # we'll leave og alone for now
     renamed_copy = graph.copy()
@@ -208,21 +250,22 @@ def make_a_shower(graph: nx.Graph) -> nx.Graph:
             shower.nodes[node]['color'] = 'y'
     return shower
 
-def main():
+def main() -> bool:
     #### just making sure image filesaves work
     if not exists("img/hexcolor"):
         makedirs("img/hexcolor")
     #### initialize color code graph with errors
     origG = make_a_base_graph()
     flag_color_graph(origG, 0.05)
-    #### dualizing stuff and making error show-ers
+    #### dualizing and subtiling
     dual = dual_of_three_colored_graph(origG)
-    dual_shower = make_a_shower(dual)
     subr = subtile(dual, 'r')
-    subr_shower = make_a_shower(subr)
     subg = subtile(dual, 'g')
-    subg_shower = make_a_shower(subg)
     subb = subtile(dual, 'b')
+    #### flag syndromes yellow for better visualizing
+    dual_shower = make_a_shower(dual)
+    subr_shower = make_a_shower(subr)
+    subg_shower = make_a_shower(subg)
     subb_shower = make_a_shower(subb)
     #### visualizing part
     draw_graph_with_colored_edges_and_nodes(origG, "img/hexcolor/original.png")
@@ -230,6 +273,8 @@ def main():
     for i, graph in enumerate([subr_shower, subg_shower, subb_shower]):      
         draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
         print(decode_subtile(graph))
+    
+    return True
 
 if __name__ == "__main__":
     main()
