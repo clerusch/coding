@@ -256,6 +256,20 @@ def make_a_shower(graph: nx.Graph) -> nx.Graph:
             shower.nodes[node]['color'] = 'y'
     return shower
 
+def find_hyper_edges(dual_graph: nx.Graph, edges_array_r: List[any],
+                     edges_array_g: List[any], edges_array_b: List[any]) -> set:
+    set_of_all_edges_bounding_hyperedge = set()
+    for color in [edges_array_r, edges_array_g, edges_array_b]:
+        for edge in color:
+            set_of_all_edges_bounding_hyperedge.add(edge)
+    #### next steps: - find cycles among these edges
+    ####             - map those cycles to og graph nodes bounded by it
+    ####             - start by making a graph copy, removing all nodes not on hyperedge
+    hyper_edges_boundary_nodes = set()
+    for edge in set_of_all_edges_bounding_hyperedge:
+        hyper_edges_boundary_nodes.add(edge[0])
+        hyper_edges_boundary_nodes.add(edge[1])
+
 def main() -> bool:
     #### just making sure image filesaves work
     if not exists("img/hexcolor"):
@@ -278,7 +292,7 @@ def main() -> bool:
     draw_graph_with_colored_edges_and_nodes(dual_shower, "img/hexcolor/dual.png")
     for i, graph in enumerate([subr_shower, subg_shower, subb_shower]):      
         draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
-        print(decode_subtile(graph))
+        print(f"The prediction for subgraph {i} is:", decode_subtile(graph))
     
     return True
 
