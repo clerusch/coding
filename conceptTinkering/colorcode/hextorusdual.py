@@ -128,22 +128,33 @@ def subtile(Graph: nx.Graph, color: str) -> nx.Graph:
     G.remove_nodes_from(list(nx.isolates(G)))
     return G
 
-def gen_syndrome_array(graph: nx.Graph) -> List[any]:
-    syndrome = np.zeros(len(graph.nodes()), dtype= np.uint8)
-    # maybe something with enumerate here?
-    # idc i'm going home for now ttyl
-    for node in graph.nodes:
-        if graph.nodes[node]['fault_ids'] == 1:
-            syndrome[node] = (syndrome[node]+1)%2
-
 def decode_subtile(graph: nx.Graph) -> List[any]:
     """
-    churns out an error prediction from syndromy faul_ids
+    churns out an error edges prediction from syndrome fault_ids
     on a graph
     """
-    matching = Matching(graph)
-    syndrome = gen_syndrome_array(graph)
+    # we'll leave og alone for now
+    renamed_copy = graph.copy()
+    print(renamed_copy.nodes)
+    # make renamed_copy usable (hopefully)
+    for i, node in enumerate(graph.nodes):
+        renamed_copy.nodes[node]['og_name'] = node
+        renamed_copy = nx.relabel_nodes(renamed_copy,{node: i})
+    print(renamed_copy.nodes)
+    matching = Matching(renamed_copy)
+    # generate syndrome on renamed_copy
+    syndrome = np.zeros(len(graph.nodes), dtype=np.uint8)
+    for node in renamed_copy.nodes:
+        if renamed_copy.nodes[node]['fault_ids'] == 1:
+            syndrome[node] = 1
+    print(syndrome)
+    # predict edges on the renamed_copy
     prediction = matching.decode_to_edges_array(syndrome)
+    # rename nodes to be actually usable
+    print(prediction)
+    for edge in prediction:
+        for i in range(len(edge)):
+            edge[i] = renamed_copy.nodes[edge[i]]['og_name']
     
     return prediction
 
