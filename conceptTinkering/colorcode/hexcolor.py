@@ -244,6 +244,12 @@ def decode_subtile(graph: nx.Graph) -> List[any]:
     return prediction
 
 def make_a_shower(graph: nx.Graph) -> nx.Graph:
+    """
+    Args:
+        graph(nx.Graph): graph we want a yellow syndrome flagged copy of
+    Returns:
+        shower(nx.Graph): graph with yellow marked syndrome nodes
+    """
     shower = graph.copy()
     for node in shower.nodes:
         if shower.nodes[node]['fault_ids'] == 1:
