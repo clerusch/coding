@@ -1,16 +1,70 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from pymatching import Matching
-from hextorus import tor_hex48_color_encode, draw_graph_with_colored_edges
-from threecolorize import make_a_base_graph
-import numpy as np
-import random
+from numpy import zeros, uint8
+from random import random
 from typing import List, FrozenSet
-import time
+from os import makedirs
+from os.path import exists
 
-def colorize_graph_black(G):
+"""
+The main function of this file will generate a set of images
+of the pertaining color code graph, its dual, and its respective 
+2- colored subgraphs and print an error prediction on the subgraphs.
+
+A folder "img/hexcolor/" will be created to save image files if it does not exist.
+"""
+
+def colorize_graph_black(G: nx.Graph) -> bool:
     for u, v, attr in G.edges(data=True):
         G[u][v]['color'] = 'black'
+    return True
+
+def tor_hex48_color_encode(G: nx.Graph,m: int=6,n: int=4) -> bool:
+    """
+    G: nx Graph
+    n,m: how many by how many hexagon, default to 6 and 4 like in delfosse
+    """
+    rgb_list = ['r', 'g', 'b']
+    # initialize all edge colors to black
+    for u, v, attr in G.edges(data=True):
+        G[u][v]['color'] = 'black'
+    
+    # colorizing algorithm
+    
+    # horizontal edges
+    for i in range(int(n/2)):
+            for j in range(m):
+                first_coordinate = (2*i,2*j)
+                second_coordinate = (2*i+1,2*j)
+                G[first_coordinate][second_coordinate]['color'] = rgb_list[j%3]
+    for i in range(int(n/2)):
+        for j in range(m):
+            first_coordinate = (2*i+1,2*j+1)
+            second_coordinate = ((2*i+2)%n,2*j+1)
+            G[first_coordinate][second_coordinate]['color'] = rgb_list[(j-1)%3]
+    # left ladder edges
+    for i in range(int(n/2)):
+        for j in range(2*m):
+            first_coordinate = (2*i,j)
+            second_coordinate = (2*i,(j+1)%(2*m))
+            G[first_coordinate][second_coordinate]['color'] = rgb_list[(1-j)%3]
+    # right ladder edges
+    for i in range(int(n/2)):
+        for j in range(2*m):
+            first_coordinate = (2*i+1,j)
+            second_coordinate = (2*i+1,(j+1)%(2*m))
+            G[first_coordinate][second_coordinate]['color'] = rgb_list[(1-j)%3]
+    return True
+
+def make_a_base_graph(m: int=6,n: int=4) -> nx.Graph:
+    G = nx.hexagonal_lattice_graph(m, n, periodic=True)
+    colorize_graph_black(G)
+    tor_hex48_color_encode(G,m,n)
+    for node in G.nodes:
+        G.nodes[node]['color'] = 'black'
+        G.nodes[node]['fault_ids'] = 0
+    return G
 
 def draw_graph_with_colored_edges_and_nodes(G: nx.Graph, file: str=None, name: str=None) -> bool:
     """
@@ -41,7 +95,7 @@ def flag_color_graph(graph: nx.Graph, per=0.1) -> bool:
     on each nodes errors happen
     """
     for node in graph.nodes:
-        if random.random()< per:
+        if random()< per:
             graph.nodes[node]['fault_ids'] = 1
             graph.nodes[node]['color'] = 'y'
     return True
@@ -88,18 +142,11 @@ def dual_of_three_colored_graph(graph: nx.Graph) -> nx.Graph:
         for node in face:
             if graph.nodes[node]['fault_ids'] == 1:
                 dual_graph.nodes[i]['fault_ids'] = (dual_graph.nodes[i]['fault_ids']+1)%2
-        #### just to check things and visualize them
-        # for node in face:
-        #     graph.nodes[node]['color'] = color_of_face
-        # draw_graph_with_colored_edges_and_nodes(graph, "img/hexcolor/testloops.png")
-        # for node in face:
-        #     graph.nodes[node]['color'] = 'black'
     # connect nodes
     for i, face in enumerate(faces):
         otherfaces = faces[:i]+faces[((i+1)%(len(faces)+1)):]
         for j, face2 in enumerate(otherfaces):
             lap_nodes = set(face & face2)
-            # print(f"comparing face:\n {face} \n and face2: \n {face2}.\n The overlap is:\n{lap_nodes}")
             if lap_nodes:
                 # A three-colorable graph will only ever have two nodes between two faces
                 node1 = lap_nodes.pop()
@@ -141,7 +188,7 @@ def decode_subtile(graph: nx.Graph) -> List[any]:
         renamed_copy = nx.relabel_nodes(renamed_copy,{node: i})
     matching = Matching(renamed_copy)
     # generate syndrome on renamed_copy
-    syndrome = np.zeros(len(graph.nodes), dtype=np.uint8)
+    syndrome = zeros(len(graph.nodes), dtype=uint8)
     for node in renamed_copy.nodes:
         if renamed_copy.nodes[node]['fault_ids'] == 1:
             syndrome[node] = 1
@@ -162,9 +209,13 @@ def make_a_shower(graph: nx.Graph) -> nx.Graph:
     return shower
 
 def main():
+    #### just making sure image filesaves work
+    if not exists("img/hexcolor"):
+        makedirs("img/hexcolor")
+    #### initialize color code graph with errors
     origG = make_a_base_graph()
     flag_color_graph(origG, 0.05)
-    ### dualizing stuff and making error show-ers
+    #### dualizing stuff and making error show-ers
     dual = dual_of_three_colored_graph(origG)
     dual_shower = make_a_shower(dual)
     subr = subtile(dual, 'r')
@@ -173,7 +224,7 @@ def main():
     subg_shower = make_a_shower(subg)
     subb = subtile(dual, 'b')
     subb_shower = make_a_shower(subb)
-    ########## visualizing part
+    #### visualizing part
     draw_graph_with_colored_edges_and_nodes(origG, "img/hexcolor/original.png")
     draw_graph_with_colored_edges_and_nodes(dual_shower, "img/hexcolor/dual.png")
     for i, graph in enumerate([subr_shower, subg_shower, subb_shower]):      
