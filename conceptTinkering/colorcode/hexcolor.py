@@ -3,9 +3,11 @@ import matplotlib.pyplot as plt
 from pymatching import Matching
 from numpy import zeros, uint8
 from random import random
+from random import sample
 from typing import List, FrozenSet
 from os import makedirs
 from os.path import exists
+from time import time
 
 """
 The main function of this file will generate a set of images
@@ -160,7 +162,7 @@ def find_face_color(graph: nx.Graph, face: FrozenSet) -> str:
     face_color = face_color.pop()
     return face_color
         
-def dual_of_three_colored_graph(graph: nx.Graph) -> nx.Graph:
+def dual_of_three_colored_graph(graph: nx.Graph):# -> nx.Graph:
     """
     Args:
         graph(nx.Graph): graph of which we want the dual 
@@ -196,7 +198,7 @@ def dual_of_three_colored_graph(graph: nx.Graph) -> nx.Graph:
                 dual_graph.add_edge(i,second_face_pos, color = connecting_color)
                 
     
-    return dual_graph
+    return dual_graph, faces
 
 def subtile(Graph: nx.Graph, color: str) -> nx.Graph:
     """
@@ -222,24 +224,27 @@ def decode_subtile(graph: nx.Graph) -> List[any]:
     Returns:
         prediction(List[edges]): predicted error edges on graph
     """
-    # we'll leave og alone for now
-    renamed_copy = graph.copy()
+    # we'll change og and revert this time
+    # renamed_copy = graph.copy()
     # make renamed_copy usable (hopefully)
     for i, node in enumerate(graph.nodes):
-        renamed_copy.nodes[node]['og_name'] = node
-        renamed_copy = nx.relabel_nodes(renamed_copy,{node: i})
-    matching = Matching(renamed_copy)
+        graph.nodes[node]['og_name'] = node
+        graph = nx.relabel_nodes(graph,{node: i})
+    matching = Matching(graph)
     # generate syndrome on renamed_copy
     syndrome = zeros(len(graph.nodes), dtype=uint8)
-    for node in renamed_copy.nodes:
-        if renamed_copy.nodes[node]['fault_ids'] == 1:
+    for node in graph.nodes:
+        if graph.nodes[node]['fault_ids'] == 1:
             syndrome[node] = 1
     # predict edges on the renamed_copy
     prediction = matching.decode_to_edges_array(syndrome)
     # rename nodes to be actually usable
     for edge in prediction:
         for i in range(len(edge)):
-            edge[i] = renamed_copy.nodes[edge[i]]['og_name']
+            edge[i] = graph.nodes[edge[i]]['og_name']
+    # revert the graph back to normal
+    for node in graph.nodes:
+        graph = nx.relabel_nodes(graph, {node: graph.nodes[node]['og_name']})
     
     return prediction
 
@@ -261,14 +266,56 @@ def find_hyper_edges(dual_graph: nx.Graph, edges_array_r: List[any],
     set_of_all_edges_bounding_hyperedge = set()
     for color in [edges_array_r, edges_array_g, edges_array_b]:
         for edge in color:
-            set_of_all_edges_bounding_hyperedge.add(edge)
-    #### next steps: - find cycles among these edges
-    ####             - map those cycles to og graph nodes bounded by it
-    ####             - start by making a graph copy, removing all nodes not on hyperedge
+            addable_edge = tuple(edge)
+            set_of_all_edges_bounding_hyperedge.add(addable_edge)
     hyper_edges_boundary_nodes = set()
     for edge in set_of_all_edges_bounding_hyperedge:
         hyper_edges_boundary_nodes.add(edge[0])
         hyper_edges_boundary_nodes.add(edge[1])
+    print(hyper_edges_boundary_nodes)
+    error_bound_graph = dual_graph.copy()
+    bad_nodes = []
+    for node in error_bound_graph:
+        if node not in hyper_edges_boundary_nodes:
+            bad_nodes.append(node)
+    error_bound_graph.remove_nodes_from(bad_nodes)
+    cycles = nx.cycle_basis(error_bound_graph)
+    """
+    lets put this away for now maybe the insane idea works as well
+    def cycle_finder(cycle,node, othernodes, graph):
+        if len(cycle) == 3:
+            return cycle
+        else:
+            for node2 in othernodes:
+                if node2 in graph.neighbors(node):
+                    cycle.add(node2)
+                    othernodes.remove(node2)
+                    cycle = cycle_finder(cycle, node2, othernodes, graph)
+                    break
+        return cycle
+    cycles = []
+    if hyper_edges_boundary_nodes:
+        i = 0
+        while hyper_edges_boundary_nodes:
+            if i > 1000:
+                print("ooopsie :(")
+                break
+            cycle = set()
+            node = hyper_edges_boundary_nodes.pop()
+            cycle.add(node)
+            cycles.append(cycle_finder(cycle, node, hyper_edges_boundary_nodes, dual_graph))
+            i += 1    
+    """ 
+    set_of_used_nodes = set()
+    cycle_copy = cycles.copy()
+    for cycle in cycle_copy:
+        for node in cycle:
+            if node in set_of_used_nodes:
+                cycles.remove(cycle)
+                break
+            set_of_used_nodes.add(node)
+
+    return cycles     
 
 def main() -> bool:
     #### just making sure image filesaves work
@@ -276,9 +323,19 @@ def main() -> bool:
         makedirs("img/hexcolor")
     #### initialize color code graph with errors
     origG = make_a_base_graph()
+    ## we'll take out random flagging rn to prove a point
     flag_color_graph(origG, 0.05)
+    ## This is for manually setting faults
+    # origG.nodes[(0,0)]['fault_ids'] = 1
+    # origG.nodes[(0,0)]['color'] = 'y'
+    # origG.nodes[(3,4)]['fault_ids'] = 1
+    # origG.nodes[(3,4)]['color'] = 'y'
+    # origG.nodes[(2,9)]['fault_ids'] = 1
+    # origG.nodes[(2,9)]['color'] = 'y'
+    # origG.nodes[(1,6)]['fault_ids'] = 1
+    # origG.nodes[(1,6)]['color'] = 'y'
     #### dualizing and subtiling
-    dual = dual_of_three_colored_graph(origG)
+    dual, faces = dual_of_three_colored_graph(origG)
     subr = subtile(dual, 'r')
     subg = subtile(dual, 'g')
     subb = subtile(dual, 'b')
@@ -292,8 +349,34 @@ def main() -> bool:
     draw_graph_with_colored_edges_and_nodes(dual_shower, "img/hexcolor/dual.png")
     for i, graph in enumerate([subr_shower, subg_shower, subb_shower]):      
         draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
-        print(f"The prediction for subgraph {i} is:", decode_subtile(graph))
-    
+        # print(f"The prediction for subgraph {i} is:", decode_subtile(graph))
+    # print(f"The time spent on the entire code before drawing was: {duration} seconds")
+    # print(find_hyper_edges(dual, prediction_r, prediction_g, prediction_b))
+
+    #### decoding part
+    start = time()
+    prediction_r = decode_subtile(subr)
+    prediction_g = decode_subtile(subg)
+    prediction_b = decode_subtile(subb)
+    hyper_edges = find_hyper_edges(dual, prediction_r, prediction_g, prediction_b)
+    cyclics = set()
+    print(hyper_edges)
+    for hyper_edge in hyper_edges:
+        bounded_nodes = faces[hyper_edge.pop()]
+        for face in hyper_edge:
+            bounded_nodes = bounded_nodes & faces[face]
+        bounded_nodes = frozenset(bounded_nodes)
+        cyclics.add(bounded_nodes)
+    if cyclics:
+        cyclic_list = []
+        for thing in cyclics:
+            cyclic_list.append(thing)
+
+        for i in range(len(cyclic_list)):
+            print(f"The {i}th error node on the graph is {next(iter(cyclic_list[i]))}")
+    end = time()
+    print(f"This decoding and lifting took {end-start} seconds.")
+
     return True
 
 if __name__ == "__main__":
