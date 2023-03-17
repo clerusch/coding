@@ -262,15 +262,17 @@ def make_a_shower(graph: nx.Graph) -> nx.Graph:
     return shower
 
 def find_hyper_edges(dual_graph: nx.Graph, edges_array_r: List[any],
-                     edges_array_g: List[any], edges_array_b: List[any]) -> set:
+                     edges_array_g: List[any], edges_array_b: List[any]) -> List[any]:
+    """ 
+    Takes: a dualgraph and its subgraph matching edges arrays
+    Returns: list of cycles on the dual graph
+    """
     # generate the surrounding edges of cycles
     set_of_all_edges_bounding_hyperedge = set()
     for color in [edges_array_r, edges_array_g, edges_array_b]:
         for edge in color:
             addable_edge = tuple(sorted(edge))
             set_of_all_edges_bounding_hyperedge.add(addable_edge)
-    
-    print("set of bounds is:",set_of_all_edges_bounding_hyperedge)
     # make a graph of only error cycles
     error_bound_graph = dual_graph.copy()
     bad_edges = []
@@ -283,36 +285,7 @@ def find_hyper_edges(dual_graph: nx.Graph, edges_array_r: List[any],
     error_bound_graph.remove_nodes_from(isolates)
     print("decoder graph errors are: ", error_bound_graph.edges)
     draw_graph_with_colored_edges_and_nodes(error_bound_graph, "img/hexcolor/decodergraph.png")
-    
-    # pretty sure this didnt work/ hmm maybe i can fix somewhere else
     cycles = nx.cycle_basis(error_bound_graph)
-
-    """
-    lets put this away for now maybe the insane idea works as well
-    def cycle_finder(cycle,node, othernodes, graph):
-        if len(cycle) == 3:
-            return cycle
-        else:
-            for node2 in othernodes:
-                if node2 in graph.neighbors(node):
-                    cycle.add(node2)
-                    othernodes.remove(node2)
-                    cycle = cycle_finder(cycle, node2, othernodes, graph)
-                    break
-        return cycle
-    cycles = []
-    if hyper_edges_boundary_nodes:
-        i = 0
-        while hyper_edges_boundary_nodes:
-            if i > 1000:
-                print("ooopsie :(")
-                break
-            cycle = set()
-            node = hyper_edges_boundary_nodes.pop()
-            cycle.add(node)
-            cycles.append(cycle_finder(cycle, node, hyper_edges_boundary_nodes, dual_graph))
-            i += 1    
-    """ 
     print("The cycles are: ", cycles)
     return cycles     
 
@@ -325,10 +298,18 @@ def flag_c_graph_specific(graph: nx.Graph, nodes: List[any]) -> bool:
         graph.nodes[node]['color'] = 'y'
     return True
 
-def lift(hyper_edges, faces) -> Set[FrozenSet]:
+def lift(hyper_edges: List[any], faces: List[FrozenSet]) -> Set[FrozenSet]:
+    """
+    Takes: List of dual graph cycles
+    Returns: List of enclosed og nodes
+    """
+    ## Strategy: find all ognodes that touch three included faces?
     cyclics = set()
     for hyper_edge in hyper_edges:
-        bounded_nodes = faces[hyper_edge.pop()]
+        print(hyper_edge)
+        thing_to_be_named = hyper_edge.pop()
+        print(thing_to_be_named, type(thing_to_be_named))
+        bounded_nodes = faces[thing_to_be_named]
         for face in hyper_edge:
             bounded_nodes = bounded_nodes & faces[face]
         bounded_nodes = frozenset(bounded_nodes)
@@ -344,9 +325,9 @@ def main() -> bool:
         makedirs("img/hexcolor")
     #### initialize color code graph with errors
     origG = make_a_base_graph()
-    flag_color_graph(origG, 0.05)
+    # flag_color_graph(origG, 0.05)
     ## This is for manually setting faults
-    # flag_c_graph_specific(origG, [(1,5),(2,5)])
+    flag_c_graph_specific(origG, [(0,0),(1,2)])
     #### dualizing and subtiling
     dual, faces = dual_of_three_colored_graph(origG)
     subr, subg, subb = subtile(dual, 'r'), subtile(dual, 'g'), subtile(dual, 'b')
@@ -355,9 +336,10 @@ def main() -> bool:
     #### decoding part
     start = time()
     pred_r, pred_g, pred_b = decode_subtile(subr), decode_subtile(subg), decode_subtile(subb)
-    hyper_edges = find_hyper_edges(dual, pred_r, pred_g, pred_b)
+    hyper_edge_cycles = find_hyper_edges(dual, pred_r, pred_g, pred_b)
     ## get back to og nodes from dual nodes/ faces
-    cyclic_list = list(lift(hyper_edges, faces))
+    print("hyp_edge_cycles are: ", hyper_edge_cycles)
+    og_enc_nodes_by_dual_cycles = list(lift(hyper_edge_cycles, faces))
     end = time()
     #### visualizing part
     print(f"This decoding and lifting took {end-start} seconds.")
@@ -365,15 +347,14 @@ def main() -> bool:
     draw_graph_with_colored_edges_and_nodes(dual_syn, "img/hexcolor/dual.png")
     for i, graph in enumerate([subr_syn, subg_syn, subb_syn]):      
         draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
-    print("The red prediction is: ", pred_r)
-    print("The green prediction is: ", pred_g)
-    print("The blue prediction is: ", pred_b)
-    print("Hyperedges are: ", hyper_edges)
-    print("cyclics are: ", cyclic_list)
-    if cyclic_list:
-        for i in range(len(cyclic_list)):
-            print(f"The {i}th error node on the graph is {next(iter(cyclic_list[i]))}")
-    
+    # print("The red prediction is: ", pred_r)
+    # print("The green prediction is: ", pred_g)
+    # print("The blue prediction is: ", pred_b)
+    # print("Hyperedges are: ", hyper_edges)
+    print("cyclics are: ", og_enc_nodes_by_dual_cycles)
+    if og_enc_nodes_by_dual_cycles:
+        for i in range(len(og_enc_nodes_by_dual_cycles)):
+            print(f"The {i}th error node on the graph is {next(iter(og_enc_nodes_by_dual_cycles[i]))}")
     return True
 
 if __name__ == "__main__":
