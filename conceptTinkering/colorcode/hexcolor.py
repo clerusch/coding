@@ -4,7 +4,7 @@ from pymatching import Matching
 from numpy import zeros, uint8
 from random import random
 from random import sample
-from typing import List, FrozenSet
+from typing import List, FrozenSet, Set
 from os import makedirs
 from os.path import exists
 from time import time
@@ -325,7 +325,7 @@ def flag_c_graph_specific(graph: nx.Graph, nodes: List[any]) -> bool:
         graph.nodes[node]['color'] = 'y'
     return True
 
-def lift(hyper_edges, faces):
+def lift(hyper_edges, faces) -> Set[FrozenSet]:
     cyclics = set()
     for hyper_edge in hyper_edges:
         bounded_nodes = faces[hyper_edge.pop()]
@@ -333,6 +333,9 @@ def lift(hyper_edges, faces):
             bounded_nodes = bounded_nodes & faces[face]
         bounded_nodes = frozenset(bounded_nodes)
         cyclics.add(bounded_nodes)
+    # clear up empty frozenset
+    if frozenset() in cyclics:
+        cyclics.remove(frozenset())
     return cyclics
 
 def main() -> bool:
@@ -341,9 +344,9 @@ def main() -> bool:
         makedirs("img/hexcolor")
     #### initialize color code graph with errors
     origG = make_a_base_graph()
-    # flag_color_graph(origG, 0.05)
+    flag_color_graph(origG, 0.05)
     ## This is for manually setting faults
-    flag_c_graph_specific(origG, [(1,5),(2,5)])
+    # flag_c_graph_specific(origG, [(1,5),(2,5)])
     #### dualizing and subtiling
     dual, faces = dual_of_three_colored_graph(origG)
     subr, subg, subb = subtile(dual, 'r'), subtile(dual, 'g'), subtile(dual, 'b')
@@ -354,15 +357,7 @@ def main() -> bool:
     pred_r, pred_g, pred_b = decode_subtile(subr), decode_subtile(subg), decode_subtile(subb)
     hyper_edges = find_hyper_edges(dual, pred_r, pred_g, pred_b)
     ## get back to og nodes from dual nodes/ faces
-    cyclics = lift(hyper_edges, faces)
-    print(cyclics)
-    if cyclics:
-        cyclic_list = []
-        for thing in cyclics:
-            cyclic_list.append(thing)
-
-        for i in range(len(cyclic_list)):
-            print(f"The {i}th error node on the graph is {next(iter(cyclic_list[i]))}")
+    cyclic_list = list(lift(hyper_edges, faces))
     end = time()
     #### visualizing part
     print(f"This decoding and lifting took {end-start} seconds.")
@@ -374,8 +369,11 @@ def main() -> bool:
     print("The green prediction is: ", pred_g)
     print("The blue prediction is: ", pred_b)
     print("Hyperedges are: ", hyper_edges)
-    print("cyclics are: ", cyclics)
-
+    print("cyclics are: ", cyclic_list)
+    if cyclic_list:
+        for i in range(len(cyclic_list)):
+            print(f"The {i}th error node on the graph is {next(iter(cyclic_list[i]))}")
+    
     return True
 
 if __name__ == "__main__":
