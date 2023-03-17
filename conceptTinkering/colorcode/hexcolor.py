@@ -117,13 +117,15 @@ def flag_color_graph(graph: nx.Graph, per: float=0.1) -> bool:
         graph(nx.Graph): graph to be altered with errors on nodes
         per(float): probability on error occuring on each node
     Returns:
-        bool: Success of operation
+        set(node): Actually occured errors
     """
+    error_nodes = set()
     for node in graph.nodes:
         if random()< per:
             graph.nodes[node]['fault_ids'] = 1
             graph.nodes[node]['color'] = 'y'
-    return True
+            error_nodes.add(node)
+    return error_nodes
 
 def find_6_loops(graph: nx.Graph) -> List[FrozenSet[any]]:
     """
@@ -298,26 +300,29 @@ def flag_c_graph_specific(graph: nx.Graph, nodes: List[any]) -> bool:
         graph.nodes[node]['color'] = 'y'
     return True
 
-def lift(hyper_edges: List[any], faces: List[FrozenSet]) -> Set[FrozenSet]:
+def lift(hyper_edges: List[any], faces: List[FrozenSet]) -> Set[any]:
     """
-    Takes: List of dual graph cycles
+    Takes: List of dual graph cycles, facenodes to face map
     Returns: List of enclosed og nodes
     """
-    ## Strategy: find all ognodes that touch three included faces?
-    cyclics = set()
+    ## Strategy: understand and comment the below code
+    enc_nodes = set()
     for hyper_edge in hyper_edges:
-        print(hyper_edge)
+        print("hyper_edge is: ", hyper_edge)
         thing_to_be_named = hyper_edge.pop()
-        print(thing_to_be_named, type(thing_to_be_named))
+        print("thing_to_be_named is: ", thing_to_be_named, type(thing_to_be_named))
         bounded_nodes = faces[thing_to_be_named]
         for face in hyper_edge:
             bounded_nodes = bounded_nodes & faces[face]
         bounded_nodes = frozenset(bounded_nodes)
-        cyclics.add(bounded_nodes)
-    # clear up empty frozenset
-    if frozenset() in cyclics:
-        cyclics.remove(frozenset())
-    return cyclics
+        enc_nodes.add(bounded_nodes)
+    # clear up empty frozenset and pop the items to a set
+    if frozenset() in enc_nodes:
+        enc_nodes.remove(frozenset())
+    res = set()
+    for enc_node in enc_nodes:
+        res.add(next(iter(set(enc_node))))
+    return res
 
 def main() -> bool:
     #### just making sure image filesaves work
@@ -325,9 +330,10 @@ def main() -> bool:
         makedirs("img/hexcolor")
     #### initialize color code graph with errors
     origG = make_a_base_graph()
-    # flag_color_graph(origG, 0.05)
+    actual_errors = flag_color_graph(origG, 0.05)
     ## This is for manually setting faults
-    flag_c_graph_specific(origG, [(0,0),(1,2)])
+    # actual_errors = [(0,0),(1,2)]
+    # flag_c_graph_specific(origG, actual_errors)
     #### dualizing and subtiling
     dual, faces = dual_of_three_colored_graph(origG)
     subr, subg, subb = subtile(dual, 'r'), subtile(dual, 'g'), subtile(dual, 'b')
@@ -339,7 +345,7 @@ def main() -> bool:
     hyper_edge_cycles = find_hyper_edges(dual, pred_r, pred_g, pred_b)
     ## get back to og nodes from dual nodes/ faces
     print("hyp_edge_cycles are: ", hyper_edge_cycles)
-    og_enc_nodes_by_dual_cycles = list(lift(hyper_edge_cycles, faces))
+    og_enc_nodes_by_dual_cycles = lift(hyper_edge_cycles, faces)
     end = time()
     #### visualizing part
     print(f"This decoding and lifting took {end-start} seconds.")
@@ -351,10 +357,10 @@ def main() -> bool:
     # print("The green prediction is: ", pred_g)
     # print("The blue prediction is: ", pred_b)
     # print("Hyperedges are: ", hyper_edges)
-    print("cyclics are: ", og_enc_nodes_by_dual_cycles)
     if og_enc_nodes_by_dual_cycles:
         for i in range(len(og_enc_nodes_by_dual_cycles)):
-            print(f"The {i}th error node on the graph is {next(iter(og_enc_nodes_by_dual_cycles[i]))}")
+            print(f"The {i}th error node on the graph is {og_enc_nodes_by_dual_cycles.pop()}")
+    print("The actual errors were: ", actual_errors)
     return True
 
 if __name__ == "__main__":
