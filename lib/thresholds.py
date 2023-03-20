@@ -244,7 +244,7 @@ def steaneLerCalc(H, logicals, nr=1000, per = 0.3):
             numErrors += 1
     return numErrors/nr
 
-def thresholdPlotter(dists, pers, nr, first_code, second_code):
+def thresholdPlotter(dists, pers, nr, first_code, second_code) -> bool:
     """
     plots logical error rates of a quantum code with a list of distances
     and physical error rates
@@ -270,6 +270,7 @@ def thresholdPlotter(dists, pers, nr, first_code, second_code):
     # plt.yscale('log')
     plt.legend(loc=0)
     plt.show()
+    return True
 
 def main():
     dists = range(5,16,4)

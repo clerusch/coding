@@ -1,14 +1,13 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 from pymatching import Matching
-from numpy import zeros, uint8
+from numpy import zeros, uint8, linspace, array
 from random import random
 from random import sample
 from typing import List, FrozenSet, Set
 from os import makedirs
 from os.path import exists
 from time import time
-
+from matplotlib.pyplot import figure, savefig, title, show, xlabel, ylabel, legend, errorbar, close
 """
 The main function of this file will generate a set of images
 of the pertaining color code graph, its dual, and its respective 
@@ -96,9 +95,9 @@ def draw_graph_with_colored_edges_and_nodes(G: nx.Graph, file: str=None, name: s
     node_colors = [data['color'] for _, data in G.nodes(data=True)] 
     edge_colors = [G[u][v]['color'] for u, v in G.edges()]
 
-    plt.figure()
+    figure()
     if name:
-        plt.title(name)
+        title(name)
     if pos: 
         nx.draw(G, pos, with_labels=True, node_color=node_colors, edge_color=edge_colors)
     elif not pos:
@@ -106,12 +105,13 @@ def draw_graph_with_colored_edges_and_nodes(G: nx.Graph, file: str=None, name: s
     if nx.get_edge_attributes(G,"fault_ids"):
         nx.draw_networkx_edge_labels(G, pos, edge_labels=nx.get_edge_attributes(G, "fault_ids"))
     if file:
-        plt.savefig(file)
+        savefig(file)
     else:
-        plt.show()
+        show()
+    close()
     return True
 
-def flag_color_graph(graph: nx.Graph, per: float=0.1) -> bool:
+def flag_color_graph(graph: nx.Graph, per: float=0.1) -> Set[any]:
     """
     Args:
         graph(nx.Graph): graph to be altered with errors on nodes
@@ -285,10 +285,8 @@ def find_hyper_edges(dual_graph: nx.Graph, edges_array_r: List[any],
     error_bound_graph.remove_edges_from(bad_edges)
     isolates = list(nx.isolates(error_bound_graph))
     error_bound_graph.remove_nodes_from(isolates)
-    print("decoder graph errors are: ", error_bound_graph.edges)
-    draw_graph_with_colored_edges_and_nodes(error_bound_graph, "img/hexcolor/decodergraph.png")
+    # draw_graph_with_colored_edges_and_nodes(error_bound_graph, "img/hexcolor/decodergraph.png")
     cycles = nx.cycle_basis(error_bound_graph)
-    print("The cycles are: ", cycles)
     return cycles     
 
 def flag_c_graph_specific(graph: nx.Graph, nodes: List[any]) -> bool:
@@ -300,19 +298,17 @@ def flag_c_graph_specific(graph: nx.Graph, nodes: List[any]) -> bool:
         graph.nodes[node]['color'] = 'y'
     return True
 
-def lift(hyper_edges: List[any], faces: List[FrozenSet]) -> Set[any]:
+def lift(dual_edge_cycles: List[any], faces: List[FrozenSet]) -> Set[any]:
     """
     Takes: List of dual graph cycles, facenodes to face map
     Returns: List of enclosed og nodes
     """
     ## Strategy: understand and comment the below code
     enc_nodes = set()
-    for hyper_edge in hyper_edges:
-        print("hyper_edge is: ", hyper_edge)
-        thing_to_be_named = hyper_edge.pop()
-        print("thing_to_be_named is: ", thing_to_be_named, type(thing_to_be_named))
-        bounded_nodes = faces[thing_to_be_named]
-        for face in hyper_edge:
+    for dual_edge_cycle in dual_edge_cycles:
+        face_on_dec = dual_edge_cycle.pop()
+        bounded_nodes = faces[face_on_dec]
+        for face in dual_edge_cycle:
             bounded_nodes = bounded_nodes & faces[face]
         bounded_nodes = frozenset(bounded_nodes)
         enc_nodes.add(bounded_nodes)
@@ -324,43 +320,102 @@ def lift(hyper_edges: List[any], faces: List[FrozenSet]) -> Set[any]:
         res.add(next(iter(set(enc_node))))
     return res
 
-def main() -> bool:
-    #### just making sure image filesaves work
-    if not exists("img/hexcolor"):
-        makedirs("img/hexcolor")
-    #### initialize color code graph with errors
-    origG = make_a_base_graph()
-    actual_errors = flag_color_graph(origG, 0.05)
-    ## This is for manually setting faults
-    # actual_errors = [(0,0),(1,2)]
-    # flag_c_graph_specific(origG, actual_errors)
+def total_decoder(graph: nx.Graph, per: float) -> bool:
+    """ 
+    Takes: a color code graph and physical error rate
+    Returns: Success of correction operation
+    """
+    actual_errors = flag_color_graph(graph, per)
     #### dualizing and subtiling
-    dual, faces = dual_of_three_colored_graph(origG)
+    dual, faces = dual_of_three_colored_graph(graph)
     subr, subg, subb = subtile(dual, 'r'), subtile(dual, 'g'), subtile(dual, 'b')
-    #### flag syndromes yellow for better visualizing
-    dual_syn, subr_syn, subg_syn, subb_syn = make_a_shower(dual), make_a_shower(subr), make_a_shower(subg), make_a_shower(subb)
     #### decoding part
-    start = time()
     pred_r, pred_g, pred_b = decode_subtile(subr), decode_subtile(subg), decode_subtile(subb)
     hyper_edge_cycles = find_hyper_edges(dual, pred_r, pred_g, pred_b)
     ## get back to og nodes from dual nodes/ faces
-    print("hyp_edge_cycles are: ", hyper_edge_cycles)
     og_enc_nodes_by_dual_cycles = lift(hyper_edge_cycles, faces)
-    end = time()
-    #### visualizing part
-    print(f"This decoding and lifting took {end-start} seconds.")
-    draw_graph_with_colored_edges_and_nodes(origG, "img/hexcolor/original.png")
-    draw_graph_with_colored_edges_and_nodes(dual_syn, "img/hexcolor/dual.png")
-    for i, graph in enumerate([subr_syn, subg_syn, subb_syn]):      
-        draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
-    # print("The red prediction is: ", pred_r)
-    # print("The green prediction is: ", pred_g)
-    # print("The blue prediction is: ", pred_b)
-    # print("Hyperedges are: ", hyper_edges)
-    if og_enc_nodes_by_dual_cycles:
-        for i in range(len(og_enc_nodes_by_dual_cycles)):
-            print(f"The {i}th error node on the graph is {og_enc_nodes_by_dual_cycles.pop()}")
-    print("The actual errors were: ", actual_errors)
+    return og_enc_nodes_by_dual_cycles == actual_errors
+
+def cc_ler_calc(graph: nx.Graph, per: float, nr: int) -> float:
+    numErrors = 0
+    for _ in range(nr):
+        if not total_decoder(graph, per):
+            numErrors += 1
+    return numErrors/nr
+
+def cc_threshold_plotter+491777057508(dists: List[any], pers: List[float], nr:int, file=None) -> bool:
+    log_errors_all_dist = []
+    for d in dists:
+        print("Simulating d = {}".format(d))
+        origG = make_a_base_graph(d[0],d[1])
+        lers = []
+        for per in pers:
+            print(f"per={per}")
+            graph = origG.copy()
+            lers.append(cc_ler_calc(graph, per, nr))
+        log_errors_all_dist.append(array(lers))
+    figure()
+    for dist, logical_errors in zip(dists, log_errors_all_dist):
+        std_err = (logical_errors*(1-logical_errors)/nr)**0.5
+        errorbar(pers, logical_errors, yerr=std_err, label="L={}".format(dist))
+    xlabel("Physical error rate")
+    ylabel("Logical error rate")
+    legend(loc=0)
+    if file:
+        if not exists("img/hexcolor"):
+            makedirs("img/hexcolor")
+        savefig("img/hexcolor/"+file)
+    else:
+        show()  
+    close()   
+    return True
+
+def main() -> bool:
+    """
+    while True:
+        lets stash this
+        #### just making sure image filesaves work
+        if not exists("img/hexcolor"):
+            makedirs("img/hexcolor")
+        #### initialize color code graph with errors
+        origG = make_a_base_graph()
+        actual_errors = flag_color_graph(origG, 0.05)
+        ## This is for manually setting faults
+        # actual_errors = [(0,0),(1,2)]
+        # flag_c_graph_specific(origG, actual_errors)
+        #### dualizing and subtiling
+        dual, faces = dual_of_three_colored_graph(origG)
+        subr, subg, subb = subtile(dual, 'r'), subtile(dual, 'g'), subtile(dual, 'b')
+        #### flag syndromes yellow for better visualizing
+        dual_syn, subr_syn, subg_syn, subb_syn = make_a_shower(dual), make_a_shower(subr), make_a_shower(subg), make_a_shower(subb)
+        #### decoding part
+        start = time()
+        pred_r, pred_g, pred_b = decode_subtile(subr), decode_subtile(subg), decode_subtile(subb)
+        hyper_edge_cycles = find_hyper_edges(dual, pred_r, pred_g, pred_b)
+        ## get back to og nodes from dual nodes/ faces
+        print("hyp_edge_cycles are: ", hyper_edge_cycles)
+        og_enc_nodes_by_dual_cycles = lift(hyper_edge_cycles, faces)
+        end = time()
+        #### visualizing part
+        print(f"This decoding and lifting took {end-start} seconds.")
+        draw_graph_with_colored_edges_and_nodes(origG, "img/hexcolor/original.png")
+        draw_graph_with_colored_edges_and_nodes(dual_syn, "img/hexcolor/dual.png")
+        for i, graph in enumerate([subr_syn, subg_syn, subb_syn]):      
+            draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
+        # print("The red prediction is: ", pred_r)
+        # print("The green prediction is: ", pred_g)
+        # print("The blue prediction is: ", pred_b)
+        # print("Hyperedges are: ", hyper_edges)
+        if og_enc_nodes_by_dual_cycles:
+            for i in range(len(og_enc_nodes_by_dual_cycles)):
+                print(f"The {i}th error node on the graph is {og_enc_nodes_by_dual_cycles.pop()}")
+        print("The actual errors were: ", actual_errors)
+        return True
+    """
+    dists = [(6,4),(12,8),(24,8)]
+    pers = linspace(0.003, 0.03, 20)
+    nr = 500
+    cc_threshold_plotter(dists, pers, nr, "firstThreshold")
     return True
 
 if __name__ == "__main__":

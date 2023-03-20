@@ -1,19 +1,19 @@
 A quantum computer operates on so-called $qudits$, which can be
 any multi-level quantum system. 
 Physical implementations of these include particles with 
-spin, as well as controlled EM-waves, i.e. lasers. \\
-In this thesis we will
+spin, as well as controlled EM waves, i.e. lasers. \\
+In this thesis, we will
 focus on \emph{qubit}-based systems, i.e. two-level quantum systems as base 
 units of computation.
 
-In the following we will analyze quantum circuit diagrams using the different
+In the following, we will analyze quantum circuit diagrams using the different
 pictures of quantum mechanics.
 A quantum circuit diagram is a visual representation of the computation done
 in a quantum computer, whereby:
 \begin{itemize}
 	\item States progress in time along horizontal parallel lines
 	\item Time goes from left to right
-	\item Gates denoted X,Y,Z are the single qubit pauli operators
+	\item Gates denoted X,Y,Z are the single qubit Pauli operators
 		$\sigma_x,\sigma_y,\sigma_z$
 	\item Gates can act on one or multiple qubits, whereby an X gate 
 		on qubit 1 in a 3-qubit system should be interpreted as:
@@ -23,7 +23,7 @@ in a quantum computer, whereby:
 \begin{figure}[h!]
 	\begin{center}
 	\captionsetup{justification=centering,margin=2cm}
-	\includegraphics[scale=0.4]{img/cnotMeasureCircuit.png}\\
+	\includegraphics[scale=0.4]{img/figures/cnotMeasureCircuit.png}\\
 	\caption{A Quantum Circuit to implement a measurement based\\
 		Controlled-$X_{|\psi\rangle_{control}\rightarrow |\psi\rangle_{target}}$ Gate,
 		where $|0\rangle$ is the +1 eigenstate in $\sigma_{z}$-basis.}
