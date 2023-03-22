@@ -1,6 +1,5 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import planarity
 
 g = nx.Graph()
 

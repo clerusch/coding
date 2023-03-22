@@ -1,0 +1,22 @@
+\subsection{Classical codes}
+The concept of (classical) error-correcting codes (ECC) was
+introduced by Claude Shannon in 1948.
+Fundamentally, an ECC encodes $logical$ information within
+a large superset of basic information carriers.
+In the case of a classical computer, this means encoding a
+bitstring within a system containing more physical bits
+than the length of the encoded message, with the goal of message transmission
+being resilient to some bits being faulty or subject to interference (i.e. EM-interference).
+
+Two such classical ECCs are the repetition and the ring code.
+We call these codes linear because their graph representations are
+linear, or one-dimensional. In Quantum error correction, we speak of $[[n,k,d]]$ stabilizer
+codes if an encoding scheme allows for $n$ physical qubits to 
+encode $k$ logical qubits to an error distance of $d$, i.e. $d$ 
+arbitrary individual errors being corrigible.
+In the following, I will refer to linear or classical codes as having a 
+distance of $\frac{1}{2}$, to indicate that they do not protect against an
+arbitrary single-qubit error, but only against flips in one specific eigenbasis.
+\input{chapterstex/errorcorrection/linearcodes/repetitioncode}
+\newpage
+\input{chapterstex/errorcorrection/linearcodes/ringcode}

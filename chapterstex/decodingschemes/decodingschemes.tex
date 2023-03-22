@@ -1,0 +1,34 @@
+\subsection{Decoders for Surface/Toric codes}
+The Syndromes on the surface/toric code are a set of nodes and
+faces on the code graph. The node ancilla syndromes correspond to
+Z errors, while the face ancilla syndromes correspond to X errors.
+Since neighboring errors will trigger an ancilla that is between 
+both errors twice, a chain of errors will only appear as two ancilla
+syndrome bits being flipped at its borders.
+The task of a decoding scheme for a surface/toric code is thus to
+find the shortest paths between node pairs/face pairs, since the most likely
+chain of errors to occur given a $<50\%$ physical error rate is the 
+shortest one.\\
+In practice, decoders for surface/toric codes only need to be able to
+match nodes, since the matching of faces is just matching nodes on the 
+dual graphs and the resulting data qubit errors can just be joined
+(i.e. if an edge is found to have an error on both the X graph as well as the
+dual Z graph, we know a Y error has occurred on that edge/data-qubit).
+
+ADD FIGURE SHOWING A SYNDROME/CORRECTION!!!!!!!! 
+\input{chapterstex/decodingschemes/surfacetoric/mwpm}
+\input{chapterstex/decodingschemes/surfacetoric/unionfind}
+
+\subsection{Color code decoders}
+Unlike the surface and toric codes, in the color code the 
+data qubits sit on the graphs nodes, and the ancillas on the 
+graphs faces. Decoding the color code entails matching 
+three differently colored faces to its enclosed nodes.
+This is a significantly more challenging task than
+decoding the 2D-codes, since three-colored graph matching is a confirmed
+NP-hard problem. (reference delfosse paper)
+\input{chapterstex/decodingschemes/color/lookup}
+\input{chapterstex/decodingschemes/color/lifting}
+
+\subsection{Thresholds}
+\input{chapterstex/decodingschemes/thresholds}

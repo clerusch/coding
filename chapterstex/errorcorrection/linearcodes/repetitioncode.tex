@@ -8,8 +8,8 @@ by performing a majority vote on the transmitted message.
 	\begin{center}
 	\captionsetup{justification=centering,margin=2cm}
 	\includegraphics[scale=0.2]{./img/figures/bitflipSyndromeExtraction3Rep.png}\\
-	\caption{Bitflip Syndrome extractor\\
-        +1 measurement result on first Ancilla indicates a bitflip error
+	\caption{Bitflip Syndrome extractor for [[3,1,$\frac{1}{2}$]] repetition code\\
+        +1 measurement result on first ancilla indicates a bitflip error
         on qubits 1 or 2, +1 result on second ancilla indicates 
 		bitflip on second or third qubit}
 	\label{fig: syndrome extractor}
@@ -53,16 +53,15 @@ repetition code would be:
 And the syndrome for an X error on the first qubit would be
 $\left(\begin{array}{c}1\\0\end{array}\right)$.
 
-This way of encoding information however leaves two notable
-issues:
+If we draw a graph to represent this code, with here nodes being ancillas
+and edges being data qubits, we obtain the following:
 
-For one, it only detects bitflip, or Pauli-X errors occurring on
-the stored quantum information. While using Hadamard gates one
-could trivially adapt this code to instead detect Pauli-Z errors,
-it is not possible to use linear codes like the repetition code
-to $simultaneously$ detect Pauli-X and Pauli-Z errors occurring.
-
-Secondly, it also assumes a noise model of a ``Noisy Channel'',
-which is not compatible with the actually encountered errors in
-real physical quantum computers.\\
-INSERT FIGURE SHOWING REPETITION CODE
+\begin{figure}[h!]
+	\begin{center}
+	\captionsetup{justification=centering,margin=2cm}
+	\includegraphics[scale=0.4]{./img/figures/rep_3_graph.png}\\
+	\caption{Graph for [[3,1,$\frac{1}{2}$]] repetition code}
+        
+	\label{fig: rep_graph}
+	\end{center}
+\end{figure}

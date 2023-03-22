@@ -7,5 +7,6 @@
             "language": "latex",
             "scheme": "file"
         }
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "basic"
 }

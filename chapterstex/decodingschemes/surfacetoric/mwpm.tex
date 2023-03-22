@@ -1,0 +1,12 @@
+\subsubsection{MWPM decoding}
+\begin{enumerate}
+    \item Find a set of unmatched nodes that can be reached from the 
+    matching by alternating between matched and unmatched edges. 
+    Call these nodes "augmenting nodes".
+    \item Find an augmenting path starting from each augmenting node,
+    i.e. a path that starts and ends with an unmatched node, and
+    alternates between matched and unmatched edges. 
+    \item If such a path is found, flip all edges along it from matched
+    to unmatched, and vice versa.
+    \item Repeat until no augmenting path is found.
+\end{enumerate}

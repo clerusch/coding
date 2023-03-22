@@ -1,0 +1,10 @@
+\subsubsection{Union Find decoder}
+\begin{enumerate}
+    \item Initialize a cluster set for each syndrome node
+    \item Grow each cluster by one edge in each direction
+    \item Merge all clusters that share a node
+    \item For all clusters with an even amount of syndrome nodes,
+    perform MWPM within that cluster. Pop the found error edges from
+    the graph.
+    \item Repeat until all clusters are merged/discarded.
+\end{enumerate}

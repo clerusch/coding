@@ -3,12 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from pymatching import Matching
 
-ring_matrix = np.array([[1,1,0],
-                        [0,1,1],
-                        [1,0,1]])
-
-# ring_graph = nx.from_numpy_array(ring_matrix)
-Matching = Matching(ring_matrix)
-Matching.draw()
-# nx.draw(ring_graph)
-plt.savefig("img/figures/ring_graph.png")
+n=7
+g = nx.grid_2d_graph(n,n)
+# pos = {(i,j): (i,j) for i in range(n) for j in range(n)}
+nx.draw(g)
+plt.savefig("img/figures/bla_5_graph.png")

@@ -343,7 +343,7 @@ def cc_ler_calc(graph: nx.Graph, per: float, nr: int) -> float:
             numErrors += 1
     return numErrors/nr
 
-def cc_threshold_plotter+491777057508(dists: List[any], pers: List[float], nr:int, file=None) -> bool:
+def cc_threshold_plotter(dists: List[any], pers: List[float], nr:int, file=None) -> bool:
     log_errors_all_dist = []
     for d in dists:
         print("Simulating d = {}".format(d))
