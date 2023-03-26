@@ -6,7 +6,17 @@ The Lifting decoder works as follows:
     \item Decode subgraphs using MWPM/Union-Find
     \item Unify all edges from subgraph corrections
     \item Find all shortest-length loops on this union
+    \item NOLIFTING CASE ????
     \item All nodes bounded by the faces that are elements of the shortest-length loop sets
     are error nodes. 
-    
 \end{itemize}
+The reason for this seemingly complicated procedure is that, on its
+own, 3-colored matching would be an NP-hard problem. However, by sub-tiling
+the graph into smaller subgraphs, we can reduce the problem of decoding
+e.g. a honeycomb lattice toric color code to a set of
+MWPM-decodable toric graphs that merely need to be "lifted" into a 
+combination of subgraph decodings to decode the original color code
+graph \cite{delfosse}. 
+The polynomial time complexity of the lifting decoder does not
+violate the NP-hardness of the 3-color matching problem, since the 
+lifting procedure can also fail (NOLIFTING case).
