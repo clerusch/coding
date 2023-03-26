@@ -1,14 +1,32 @@
 \subsubsection{Surface code}
 We can therefore form a hypergraph product code of two repetition
-codes for X error detection and Z error detection respectively,
-obtaining the [[$d^2$,1,d]]``Surface-Code'' which can detect up
+codes to
+obtain the [[$d^2$,1,d]] ``Surface-Code'' which can detect up
 to d of $both$ X and Z errors, and 
-therefore any pauli error happening.
+therefore any error happening \cite{joschka}.
 We can draw this code as a graph, whereby the code's stabilizers
-are understood as an adjacency Matrix, the data qubits are on 
+are understood as an adjacency Matrix of data to ancilla qubits.
+Unlike in figure \ref{fig: surface_code}, it is possible to draw this 
+graph without colors, by drawing it such that the data qubits are on 
 edges of the graph and the ancilla qubits for Z-checks are on faces
 while the ancilla qubits for X-checks lie on nodes.\\
 Like the repetition code, the Surface code is a code that is regular until
-it's boundary nodes.
+its boundary nodes. 
+
+\begin{figure}[h!]
+	\begin{center}
+	\captionsetup{justification=centering,margin=2cm}
+	\includegraphics[scale=0.35]{./img/figures/d5surfaceCode.png}\\
+	\caption{Distance 5 Surface code with data qubits in white and 
+    ancilla qubits in grey. Green Faces tepresent X stabilizers
+    and Red faces represent Z stabilizers.
+    Errors on data qubits are marked
+    by respective Pauli names and violated stabilizers are marked in red.}
+	\label{fig: surface_code}
+	\end{center}
+\end{figure}
+
+
 INCLUDE LOGICAL OPERATORS
-INSERT FIGURE SHOWING TORIC CODE
+INSERT FIGURE SHOWING SURFACE CODE
+\newpage

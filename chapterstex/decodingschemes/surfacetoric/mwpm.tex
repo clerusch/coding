@@ -10,3 +10,9 @@
     to unmatched, and vice versa.
     \item Repeat until no augmenting path is found.
 \end{enumerate}
+This decoding scheme has the advantage of being guaranteed
+to find a global optimum of decoding edge paths.
+Under the assumption of high error rates and/or large decoding 
+graphs, this scheme also requires significantly less
+computational memory overhead than the union-find scheme
+\cite{MWPMDecoder}.

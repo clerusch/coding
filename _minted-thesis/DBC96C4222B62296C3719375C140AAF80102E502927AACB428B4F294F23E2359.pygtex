@@ -1,0 +1,40 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+    \PYG{k+kn}{from} \PYG{n+nn}{numpy} \PYG{k+kn}{import} \PYG{n}{array}\PYG{p}{,} \PYG{n}{vstack}\PYG{p}{,} \PYG{n}{hstack}\PYG{p}{,} \PYG{n}{zeros}
+    \PYG{k+kn}{from} \PYG{n+nn}{itertools} \PYG{k+kn}{import} \PYG{n}{product}
+
+    \PYG{k}{def} \PYG{n+nf}{genSteaneLookupTable}\PYG{p}{():}
+        \PYG{c+c1}{\PYGZsh{} Generate parity check matrix}
+        \PYG{n}{H} \PYG{o}{=} \PYG{n}{array}\PYG{p}{([[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{],}
+                    \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{],}
+                    \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{]])}
+        \PYG{n}{pcm} \PYG{o}{=} \PYG{n}{vstack}\PYG{p}{((}\PYG{n}{hstack}\PYG{p}{((}\PYG{n}{H}\PYG{p}{,} \PYG{n}{zeros}\PYG{p}{(}\PYG{n}{H}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{))),}
+                        \PYG{n}{hstack}\PYG{p}{((}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{H}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{),} \PYG{n}{H}\PYG{p}{))))}
+
+        \PYG{c+c1}{\PYGZsh{} Generate lookup table}
+        \PYG{n}{lookup\PYGZus{}table} \PYG{o}{=} \PYG{p}{\PYGZob{}\PYGZcb{}}
+        \PYG{k}{for} \PYG{n}{error} \PYG{o+ow}{in} \PYG{n}{product}\PYG{p}{([}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{repeat}\PYG{o}{=}\PYG{l+m+mi}{14}\PYG{p}{):}
+            \PYG{n}{syndrome} \PYG{o}{=} \PYG{n+nb}{tuple}\PYG{p}{(}\PYG{n}{pcm} \PYG{o}{@} \PYG{n}{error} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{2}\PYG{p}{)}
+            \PYG{k}{if} \PYG{n}{syndrome} \PYG{o+ow}{in} \PYG{n}{lookup\PYGZus{}table}\PYG{p}{:}
+                \PYG{n}{lookup\PYGZus{}table}\PYG{p}{[}\PYG{n}{syndrome}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{error}\PYG{p}{)}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{lookup\PYGZus{}table}\PYG{p}{[}\PYG{n}{syndrome}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[}\PYG{n}{error}\PYG{p}{]}
+
+        \PYG{c+c1}{\PYGZsh{} Remove duplicates from lookup table}
+        \PYG{k}{for} \PYG{n}{key} \PYG{o+ow}{in} \PYG{n}{lookup\PYGZus{}table}\PYG{p}{:}
+            \PYG{n}{lookup\PYGZus{}table}\PYG{p}{[}\PYG{n}{key}\PYG{p}{]} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{set}\PYG{p}{(}\PYG{n}{lookup\PYGZus{}table}\PYG{p}{[}\PYG{n}{key}\PYG{p}{]))}
+
+        \PYG{k}{return} \PYG{n}{lookup\PYGZus{}table}
+
+    \PYG{n}{syndrome} \PYG{o}{=} \PYG{n}{array}\PYG{p}{([}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{])}
+
+    \PYG{n}{possibles} \PYG{o}{=} \PYG{n}{genSteaneLookupTable}\PYG{p}{()[}\PYG{n+nb}{tuple}\PYG{p}{(}\PYG{n}{syndrome}\PYG{p}{)]}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}The syndrome }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{syndrome}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{ can be caused by the following errors: \PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{curr\PYGZus{}minweight} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{,}\PYG{l+m+mi}{100}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{possible} \PYG{o+ow}{in} \PYG{n}{possibles}\PYG{p}{:}
+        \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{possible}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{possible}\PYG{p}{)}\PYG{o}{\PYGZlt{}}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{curr\PYGZus{}minweight}\PYG{p}{):}
+            \PYG{n}{curr\PYGZus{}minweight} \PYG{o}{=} \PYG{n}{possible}
+
+    \PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}The most likely cause of this syndrome is}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s2}{ }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{curr\PYGZus{}minweight}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

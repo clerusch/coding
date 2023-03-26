@@ -7,4 +7,3 @@ This is my bachelor thesis code repository.
 - conceptTinkering/ is a bit messy but my playground
 
 Ultimately the color code will be decoded efficiently.
-

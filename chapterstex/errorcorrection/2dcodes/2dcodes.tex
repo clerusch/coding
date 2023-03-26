@@ -1,4 +1,4 @@
-\subsection{2D codes}
+\subsection{Topological codes}
 Previous research in computer science 
 provides a toolset for generating valid codes
 from existing encoding schemes. 
@@ -7,14 +7,16 @@ of two
 existing codes will always remain a valid detection code.
 
 The parity check matrix $H$ of a hypergraph product code is generated
-by the parity check matrices of two valid codes in the following
-% way:
-% \begin{equation}
-% 	H = \left(\begin{array}{cc}
-% 		M_{pcX} & 0 \\
-% 		0 & M_{pcZ} \\
-% 	\end{array}\right)
-% \end{equation}
+by two m by n parity check matrices of valid codes in the following
+way:
+\begin{equation}
+	H = \left(\begin{array}{cc}
+		\left(M_{pc1} \otimes \mathbb{I}_{n_2}| 
+        \mathbb{I}_{m_1} \otimes M_{pc2}^T \right) & 0 \\
+		0 & \left(\mathbb{I}_{n_1}\otimes 
+        M_{pc2} | M_{pc1}^T \otimes \mathbb{I}_{m_2}\right)\\
+	\end{array}\right)
+\end{equation}
 
 \input{chapterstex/errorcorrection/2dcodes/surfacecode}
 

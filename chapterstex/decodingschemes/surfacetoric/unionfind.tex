@@ -8,3 +8,11 @@
     the graph.
     \item Repeat until all clusters are merged/discarded.
 \end{enumerate}
+While the union-find decoder is faster for small to medium
+sized graphs and relatively simple to implement,
+ it is not guaranteed to find a global optimum
+and its performance degrades significantly for large
+graphs and high error rates \cite{UFDecoder}.
+For this reason, a MWPM algorithm was chosen for decoding the toric
+subgraphs of the color code in our lifting decoder thresholding
+in chapter \ref{sec: lifting}.

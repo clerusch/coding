@@ -1,8 +1,12 @@
-\subsubsection{Lifting decoder}
+\subsubsection{Lifting decoder}\label{sec: lifting}
+The Lifting decoder works as follows:
 \begin{itemize}
     \item Create dual of graph
     \item Generate single-edge-colored subgraphs of the dual
     \item Decode subgraphs using MWPM/Union-Find
     \item Unify all edges from subgraph corrections
-    \item Find all loops on this
+    \item Find all shortest-length loops on this union
+    \item All nodes bounded by the faces that are elements of the shortest-length loop sets
+    are error nodes. 
+    
 \end{itemize}

@@ -1,3 +1,52 @@
 \subsubsection{Lookup table decoding}
-This takes a long time to generate and cannot be done to scale,
-but is a nice toy.
+A lookup table decoder works by generating the 
+syndromes for the entire set of possible input errors, thus creating a 
+table holding possible errors responsible for each possible syndrome.
+The decoding then consists of merely assuming the minimum weight
+error that leads to the known syndrome, since given low physical 
+error rate, the least amount of errors leading to an error is the most
+probable event.
+
+This decoding scheme is particularly useful for small codes, as well 
+as non-topological (random) LDPC (Low-Density-Parity-Check) codes.
+A big issue with this decoding scheme is that generating lookup tables is
+extremely computationally expensive $(O(2^n))$. This renders it practically
+unfeasible to generate lookup tables for codes with a larger number
+of total data qubits.
+
+\begin{figure}[h!]
+	\begin{center}
+	\captionsetup{justification=centering,margin=2cm}
+	\includegraphics[scale=0.7]{./img/figures/X7errorlookup.png}\\
+	\caption{Lookup table for an X error on the central qubit of
+    a Steane code (qubit 7), generating code can be found in Appendix
+    \ref{App: lookup_table}}
+        
+	\label{fig: lookup_table}
+	\end{center}
+\end{figure}
+
+In figure \ref{fig: lookup_table} is an example of the lookup table result for
+an X error on qubit 7 (the central qubit) on the Steane code. 
+The resulting syndrome is (1,1,1,0,0,0), with the first three
+bits indicating the steane code faces X reaction, and the second three bits
+indicating the Steane code faces Z reaction. 
+The lookup table will return a set of many possible errors resulting in 
+that syndrome, but simply choosing the one with the least number of errors 
+(minimum weight) gives the correct error prediction.
+
+Since this is not a distance-scalable code, only a $pseudo$-threshold can
+be found here, i.e. the crossing point to worse performance than unencoded
+information. As can be seen in figure \ref{fig: steane_threshold}, the
+pseudo-threshold is somehow very bad. I do not know why.
+
+\begin{figure}[h!]
+	\begin{center}
+	\captionsetup{justification=centering,margin=2cm}
+	\includegraphics[scale=0.7]{./img/figures/thresholds/steaneLookupThreshold.png}\\
+	\caption{Lookup table pseudo threshold for the Steane code, generating code can be found in Appendix
+    \ref{App: steane_thresholding}}
+        
+	\label{fig: steane_threshold}
+	\end{center}
+\end{figure}

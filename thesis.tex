@@ -10,6 +10,34 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage[font=small,labelfont=bf]{caption}
+\usepackage{minted}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0.1,0.5,0.1}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.5,0,0.33}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+\usemintedstyle{colorful}
 \title{Bachelor Thesis\\ Decoding the Color Code}
 \author{Clemens Schumann, \\
 Advised by Peter-Jan Derks}
@@ -26,7 +54,6 @@ Advised by Peter-Jan Derks}
 \newpage
 \section{Error detection and correction}
 \input{chapterstex/errorcorrection/errorcorrection}
-\input{chapterstex/nextsteps}
 \newpage
 \section{Decoding Schemes}
 \input{chapterstex/decodingschemes/decodingschemes}
@@ -35,8 +62,8 @@ Advised by Peter-Jan Derks}
 \newpage
 \section{Appendix}
 \input{chapterstex/appendix/schroedingercalc.tex}
+\input{chapterstex/appendix/lookupapp.tex}
 \newpage
-%\bibliographystyle{plain}
-%\bibliography{references}
+\bibliographystyle{IEEEtran}
+\bibliography{chapterstex/references.bib}
 \end{document}
-

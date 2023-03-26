@@ -36,7 +36,7 @@ for +1 and 1 for -1.
 
 To represent the code, Stabilizers can be stacked together to
 a so-called parity-check-matrix, which satisfies:
-\begin{equation}
+\begin{equation}\label{eq: pcm}
 	M_{pc}\cdot \vec{v}_{error} = \vec{v}_{syndrome}
 \end{equation}
 So e.g. the parity check matrix for the $[3,1,\frac{1}{2}]$
@@ -53,14 +53,17 @@ repetition code would be:
 And the syndrome for an X error on the first qubit would be
 $\left(\begin{array}{c}1\\0\end{array}\right)$.
 
-If we draw a graph to represent this code, with here nodes being ancillas
-and edges being data qubits, we obtain the following:
+If we draw a graph to represent this code, with here square nodes being
+ ancilla qubits
+and round nodes being data qubits, we obtain the following:
 
 \begin{figure}[h!]
 	\begin{center}
 	\captionsetup{justification=centering,margin=2cm}
 	\includegraphics[scale=0.4]{./img/figures/rep_3_graph.png}\\
-	\caption{Graph for [[3,1,$\frac{1}{2}$]] repetition code}
+	\caption{Graph for [[3,1,$\frac{1}{2}$]] repetition code with error on
+    node 1 marked in green and resulting syndrome marked red.
+    Squares represent ancilla qubits and circles represent data qubits.}
         
 	\label{fig: rep_graph}
 	\end{center}

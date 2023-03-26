@@ -14,8 +14,11 @@ match nodes, since the matching of faces is just matching nodes on the
 dual graphs and the resulting data qubit errors can just be joined
 (i.e. if an edge is found to have an error on both the X graph as well as the
 dual Z graph, we know a Y error has occurred on that edge/data-qubit).
-
-ADD FIGURE SHOWING A SYNDROME/CORRECTION!!!!!!!! 
+An example of a distance 5 surface code with two Z errors, one X error and
+one Y error is shown in figure \ref{fig: surface_code}.
+As with the ringcode, the decoding problem can be seen as either the
+solution of equation \ref{eq: pcm} for a minimum weight $\vec{v}_{error}$
+or as a graph matching problem.
 \input{chapterstex/decodingschemes/surfacetoric/mwpm}
 \input{chapterstex/decodingschemes/surfacetoric/unionfind}
 
@@ -29,6 +32,6 @@ decoding the 2D-codes, since three-colored graph matching is a confirmed
 NP-hard problem. (reference delfosse paper)
 \input{chapterstex/decodingschemes/color/lookup}
 \input{chapterstex/decodingschemes/color/lifting}
-
+\newpage
 \subsection{Thresholds}
 \input{chapterstex/decodingschemes/thresholds}
