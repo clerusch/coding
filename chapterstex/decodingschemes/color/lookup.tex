@@ -17,7 +17,7 @@ of total data qubits.
 \begin{figure}[h!]
 	\begin{center}
 	\captionsetup{justification=centering,margin=2cm}
-	\includegraphics[scale=0.7]{./img/figures/X7errorlookup.png}\\
+	\includegraphics[scale=0.5]{./img/figures/X7errorlookup.png}\\
 	\caption{Lookup table for an X error on the central qubit of
     a Steane code (qubit 7), generating code can be found in Appendix
     \ref{App: lookup_table}}
@@ -34,20 +34,3 @@ indicating the Steane code faces Z reaction.
 The lookup table will return a set of many possible errors resulting in 
 that syndrome, but simply choosing the one with the least number of errors 
 (minimum weight) gives the correct error prediction.
-
-Since this is not a distance-scalable code, only a $pseudo$-threshold can
-be found here, i.e. the crossing point to worse performance than unencoded
-information. As can be seen in figure \ref{fig: steane_threshold}, the
-pseudo-threshold is somehow very bad. I do not know why.
-
-\begin{figure}[h!]
-	\begin{center}
-	\captionsetup{justification=centering,margin=2cm}
-	\includegraphics[scale=0.7]{./img/figures/thresholds/steaneLookupThreshold.png}\\
-	\caption{Lookup table pseudo threshold for the Steane code, generating code can be found in Appendix
-    \ref{App: steane_thresholding}}
-        
-	\label{fig: steane_threshold}
-	\end{center}
-\end{figure}
-\newpage

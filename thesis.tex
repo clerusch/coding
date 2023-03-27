@@ -1,9 +1,11 @@
 \documentclass[12pt]{article}
+
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{color}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{subfigure}
 \usepackage{xparse}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -11,6 +13,7 @@
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{minted}
 \usepackage{xcolor}
+
 \definecolor{codegreen}{rgb}{0.1,0.5,0.1}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.5,0,0.33}
@@ -56,12 +59,15 @@ Advised by Peter-Jan Derks}
 \newpage
 \section{Decoding Schemes}
 \input{chapterstex/decodingschemes/decodingschemes}
+\section{Thresholds}
+\input{chapterstex/thresholds}
 \section{Conclusion}
 \input{chapterstex/conclusion}
 \newpage
 \section{Appendix}
-\input{chapterstex/appendix/schroedingercalc.tex}
-\input{chapterstex/appendix/lookupapp.tex}
+\input{chapterstex/appendix/schroedingercalc}
+\input{chapterstex/appendix/lookupapp}
+\input{chapterstex/appendix/thresholds}
 \newpage
 \bibliographystyle{IEEEtran}
 \bibliography{chapterstex/references.bib}

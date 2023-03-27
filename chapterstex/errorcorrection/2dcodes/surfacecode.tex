@@ -6,20 +6,26 @@ to d of $both$ X and Z errors, and
 therefore any error happening \cite{joschka}.
 We can draw this code as a graph, whereby the code's stabilizers
 are understood as an adjacency Matrix of data to ancilla qubits.
+Like the repetition code, the Surface code is a code that is regular until
+its boundary nodes. 
+The logical operators on the surface code are lines that go from one 
+boundary to another that lies across, as this triggers every ancilla along
+the way twice, thus nonce, and therefore takes the message back to the
+codespace.
 Unlike in figure \ref{fig: surface_code}, it is possible to draw this 
 graph without colors, by drawing it such that the data qubits are on 
 edges of the graph and the ancilla qubits for Z-checks are on faces
-while the ancilla qubits for X-checks lie on nodes.\\
-Like the repetition code, the Surface code is a code that is regular until
-its boundary nodes. 
+while the ancilla qubits for X-checks lie on nodes.
+This wil be done for the following toric code.\\
+
 
 \begin{figure}[h!]
 	\begin{center}
 	\captionsetup{justification=centering,margin=2cm}
 	\includegraphics[scale=0.35]{./img/figures/d5surfaceCode.png}\\
 	\caption{Distance 5 Surface code with data qubits in white and 
-    ancilla qubits in grey. Green Faces tepresent X stabilizers
-    and Red faces represent Z stabilizers.
+    ancilla qubits in grey. Green Faces represent Z stabilizers
+    and Red faces represent X stabilizers.
     Errors on data qubits are marked
     by respective Pauli names and violated stabilizers are marked in red.}
 	\label{fig: surface_code}
@@ -28,5 +34,4 @@ its boundary nodes.
 
 
 INCLUDE LOGICAL OPERATORS
-INSERT FIGURE SHOWING SURFACE CODE
 \newpage
