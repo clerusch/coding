@@ -26,15 +26,15 @@ measured to detect whether and where an error has occurred
 in a multi-qubit system. It is crucial that the 
 measurement of such syndromes occurs without harming the actual
 quantum information stored in the $data-qubits$. Therefore
-two additional $ancilla-qubits$ (both initialized to 
+two additional \emph{ancilla-qubits} (both initialized to 
 $|0\rangle$) are attached to the circuit via CNOTs.
 This circuit is stabilized by IZZ and ZZI, measured by ancilla 
-1/2. The measurement result will therefore be a vector of length
+1 and 2. The measurement result will therefore be a vector of length
 two, with each entry either being +1 or -1. To simplify the 
 algebra this will be changed to the binary representation of 0 
 for +1 and 1 for -1. 
 
-To represent the code, Stabilizers can be stacked together to
+To represent the code, stabilizers can be stacked together to
 a so-called parity-check-matrix, which satisfies:
 \begin{equation}\label{eq: pcm}
 	M_{pc}\cdot \vec{v}_{error} = \vec{v}_{syndrome}

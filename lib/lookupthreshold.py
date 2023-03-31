@@ -1,7 +1,7 @@
 from betterlookup import genSteaneLookupTable, findMinWeight, findMinWeight
 from random import random
 from numpy import zeros, uint8, concatenate, array,\
-    array_equal, linspace, vstack, hstack, zeros, ndarray
+    array_equal, linspace, vstack, hstack, zeros, ndarray, logspace
 from matplotlib.pyplot import errorbar, legend, \
     savefig, xlabel, ylabel, plot
 
@@ -16,14 +16,14 @@ def genSteaneError(per)->ndarray:
     for j in range(len(zerror)):
         if random()<per:
             zerror[j] = 1
-    yerror = concatenate((xerror,zerror))
+    yerror = concatenate((xerror,zerror)) # generating too long errors
     for k, bit in enumerate(yerror[:6]):
         if random()<per:
             yerror[k] = (yerror[k] + 1)%2
             yerror[2*k] = (yerror[2*k]+1)%2
-    error = (concatenate((xerror, empty7)) + yerror \
-        + concatenate((empty7, zerror)))%2
-    return error
+    # error = (concatenate((xerror, empty7)) + yerror \
+    #     + concatenate((empty7, zerror)))%2
+    return yerror
 
 def steaneLerCalc(steaneH, nr, per, logicals)->float:
     """Calculates the logical error rate of the steane 
@@ -59,7 +59,7 @@ def main():
     steaneH = array([[1, 0, 0, 1, 0, 1, 1],
                      [0, 1, 0, 1, 1, 0, 1],
                      [0, 0, 1, 0, 1, 1, 1]])
-    pers = linspace(5/100000, 5/10000, 30)
+    pers = linspace(2*10**(-6), 2*10**(-5), 20)
     lers = []
     nr = 10000
     H = makeHgpPcm(steaneH, steaneH)

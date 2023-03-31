@@ -12,7 +12,7 @@ a projection $P$, so:
 \end{equation}
 Where $M$ is a matrix representation of the physical observable
  to be measured.
-For example, a measurement of a single qubits spin along the z-axis would be
+For example, a measurement of a single qubit's spin along the z-axis would be
 represented as:
 \begin{equation}
     M_Z = \left(
@@ -40,16 +40,23 @@ And that measurement would perform a projection $P_Z$:
 \end{equation}
 on the state, depending on whether the measurement result yielded $+1$ or $-1$.
 
-Therefore, to calculate the output of a quantum circuit in the schroedinger
-picture, simply apply the measurements and gates on the input states
-.
-
+Therefore, to calculate the output of a quantum circuit in the Schroedinger
+picture, simply apply the measurements and gates on the input states.
+\begin{figure}[h!]
+	\begin{center}
+	\captionsetup{justification=centering,margin=2cm}
+	\includegraphics[scale=0.4]{img/figures/cnotMeasureCircuit.png}\\
+	\caption{A Quantum Circuit to implement a measurement based\\
+		Controlled-$X_{|\psi\rangle_{control}\rightarrow |\psi\rangle_{target}}$ Gate,
+		where $|0\rangle$ is the +1 eigenstate in $\sigma_{z}$-basis.}
+	\label{fig:circuit1}
+	\end{center}
+\end{figure}
 As can be seen explicitly calculated in the Schroedinger 
-picture in Appendix~\ref{sec:calc1}
-, the circuit from figure~\ref{fig:circuit1}
+picture in Appendix~\ref{sec:calc1}, the circuit from figure~\ref{fig:circuit1}
 implements a CNOT gate from the control qubit to the target qubit.
 
-We will now analyze this circuit in the Heisenberg picture \cite{gottesman},
+We will now analyze this circuit in the Heisenberg picture\cite{gottesman},
 finding that it results in an equal output.
 
 \subsection{Heisenberg picture and stabilizer formalism}
@@ -74,8 +81,7 @@ the set of stabilizers:
 	|\psi_{in}\rangle \forall S \in S_{G}
 \end{equation}
 
-So for the example in Figure%~\ref{fig:circuit1}
- it is the group
+So for the example in Figure~\ref{fig:circuit1} it is the group
 of operators to whom
 $|\psi_{control}\rangle \otimes |0\rangle \otimes 
 |\psi_{target}\rangle$ is an eigenstate, namely 
@@ -109,6 +115,13 @@ Therefore $S'_{G} = \langle AS_{0}A^{\dagger},...,AS_{n}A^{\dagger}\rangle$.
 
 
 \subsubsection{Effect of measurements on stabilizers}
+After a measurement $M$, an $n$ qubit input state will always 
+collapse into either the +1 or the -1 eigenstate of the 
+measurement operator.
+In the first case the acting measurement operator was 
+$\mathbb{I}^{\otimes n}+M$, in the second it was
+$\mathbb{I}^{\otimes n}-M$.
+
 A Pauli measurement operator $M$ can either commute with all stabilizer
 operators, in which case $M$ itself is a stabilizer already. In this case
 the measurement has no effect on the state, since the measurement of a
@@ -124,24 +137,24 @@ So in order to obtain the new stabilizers  $S'_{G}$:
 	\item Identify $S\in S_{G}: \{S,M\}=0$
 	\item Remove S from $S_G$
 	\item Add $M$ to $S_G$ 
-	\item for $N \in S_G \cup\overline{X}\cup\overline{Z}:$
-		if $\{N,M\}=0$: replace N with SN
+	\item replace each $N \in S_G \cup\overline{X}\cup\overline{Z}$
+		with SN if $\{N,M\}=0$
 \end{enumerate}
 where $\overline{X}$ and $\overline{Z}$ are the sets of 
-logical X and Z operators respectively. (a logical operator is
-an operator which acts on a systems metastructure which can be treated
-as its own qubit)
+logical X and Z operators respectively. A logical operator is
+an operator which acts on a systems metastructure that can be treated
+as its own qubit.
 
 \subsubsection{Circuit Analysis in Stabilizer formalism}
-After a measurement $M$, an $n$ qubit input state will always 
-collapse into either the +1 or the -1 eigenstate of the 
-measurement operator.
 
-In the first case the acting measurement operator becomes 
-$\mathbb{I}^{\otimes n}+M$, in the second it becomes
-$\mathbb{I}^{\otimes n}-M$. Therefore, in the circuit shown in 
-figure~\ref{fig:circuit1}
-, the measurements project onto:
+In the following, stabilizers
+will be written without the tensor product symbols, so in 
+our case the stabilizer is initially: $S_{G}^{0}= \langle IZI \rangle$,
+the logical $\overline{X}$ operator is XXX and the logical
+$\overline{Z}$ operator is ZIZ.
+
+ In the circuit shown in 
+figure~\ref{fig:circuit1}, the measurements project onto:
 
 \begin{align}
 	P^{\pm}_{1} &= \frac{1}{2}\left(\mathbb{I}^{\otimes 3} \pm 
@@ -151,12 +164,6 @@ figure~\ref{fig:circuit1}
 	P^{\pm}_{3} &= \frac{1}{2} \left(\mathbb{I}^{\otimes 3} \pm
 	\mathbb{I} \otimes X \otimes \mathbb{I}\right)
 \end{align}
-
-In the following stabilizers
-will be written without the tensor product symbols, so in 
-our case the stabilizer is initially: $S_{G}^{0}= \langle IZI \rangle$,
-the logical $\overline{X}$ operator is XXX and the logical
-$\overline{Z}$ operator is ZIZ.
 
 After the first measurement, the state is stabilized by 
 IXX, since it collapses into an eigenstate of the measurement 
@@ -176,13 +183,13 @@ $P_{+}$ projected state $P_{+}|\psi_{init}\rangle$ (in short,
 +1 and -1 eigenstates have the same stabilizers if we add 
 conditional gates accordingly).
 
-For the logical operators, if $\overline{X}$ or $\overline{Z}$
-do not commute with the measurement operator, we know that their
-product with another anticommuting operator from the previous
-stabilizer must then commute with the measurement operator: 
-$[S_{prev}\overline{X}M, MS_{prev}\overline{X}]=0$ (recall the
-previous statement that all Paulis and their tensor products must
-either commute or anti-commute).
+% For the logical operators, if $\overline{X}$ or $\overline{Z}$
+% do not commute with the measurement operator, we know that their
+% product with another anticommuting operator from the previous
+% stabilizer must then commute with the measurement operator: 
+% $[S_{prev}\overline{X}M, MS_{prev}\overline{X}]=0$ (recall the
+% previous statement that all Paulis and their tensor products must
+% either commute or anti-commute).
 
 In our case, IZI and IXX anticommute,
 so now the state is stabilized by $S^{1}_{G} = \langle IXX
@@ -206,5 +213,9 @@ measurement operator.
 The stabilizer for the control and target qubit is still
 identity, and logical $\overline{Z}: ZIZ \rightarrow IIZ$.
 
-Since CNOT maps: $Z\otimes Z \mapsto I \otimes Z$, this 
-implements a logical CNOT from the first to the third qubit.
+Since this circuit maps $Z_{control}\otimes Z_{target} \mapsto I_{control}
+ \otimes Z_{target}$,
+and via a similar analysis it can be shown that it also maps
+$I\otimes Z \mapsto Z \otimes Z$, $Z\otimes I \mapsto Z \otimes I$,
+$X\otimes I \mapsto X \otimes X$ and $I\otimes X \mapsto I \otimes X$,
+this circuit implements a logical CNOT from the first to the third qubit.

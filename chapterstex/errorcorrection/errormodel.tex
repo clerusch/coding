@@ -10,14 +10,14 @@ to $simultaneously$ detect Pauli-X and Pauli-Z errors occurring.
 
 Unlike classical computers, on a quantum computer the type of error
  is not limited
-to a bitflip. Even single qubit states have an
-infinite amount of differing states to it, since when representing a single
+to a bitflip. Even for single-qubit states there exists an
+infinite amount of differing possible errors, since when representing a single
 qubit state as a vector on a Bloch sphere it immediately becomes apparent
 that there are an infinite number of vectors on that sphere which are different
-from it. It turns out though, that the change in state from one normalized
-one to another is merely a sum of two rotations.
+from it. It turns out though, that the change from one normalized
+state to another is merely a sum of rotations.
 
-Fortunately, noise can therefore be modeled as a sum of Pauli gates.
+Noise can therefore be modeled as a sum of Pauli gates.
 Any single qubit error operator matrix E can be written as:
 \begin{equation}
     E =
@@ -35,8 +35,10 @@ error $E|\psi\rangle$ will be $\mathbb{I}$; with probability $\beta$ its effect
 will be X, and so on.
 
 It is hence sufficient to determine which of these errors $\mathbb{I}$, 
-X, Y or Z has occurred, and we can apply the same operator again to return to the 
+X, Y or Z has occurred, and we can apply the appropriate operator to return to the 
 initial state.
 Since an identity noise occurring is irrelevant to us, and XY as
 well as ZY (anti-) commute, we need only detect for X and Z
 errors occurring in order to detect any single qubit errors. 
+(because of the commutation relation between \{X,Y\} and \{Y,Z\} a Y error
+will appear as both an X and Z error).

@@ -12,49 +12,43 @@ X, Y and Z error rates of $\frac{per}{3}$.
 \begin{figure}[h!]
     \centering
     \subfigure[Surface code MWPM thresholding overview]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/surfaceThresholdOverview.png}}\hfill
-    \subfigure[Detailed view for precise threshold determination]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/surfaceThresholdVeryPrecise.png}}
-    \caption{Thresholding of the surface code using the MWPM decoder implemented in the PyMatching \cite{MWPMDecoder} library.
+    \subfigure[Detailed view for precise threshold determination of surface code]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/surfaceThresholdVeryPrecise.png}}
+    \subfigure[Toric code MWPM thresholding overview]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/toricThresholdOverview.png}}\hfill
+    \subfigure[Detailed view for precise threshold determination of toric code]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/toricThresholdVeryPrecise.png}}
+    \subfigure[Cylinder code MWPM thresholding overview]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/cylinderThresholdOverview.png}}\hfill
+    \subfigure[Detailed view for precise threshold determination of cylinder code]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/cylinderThresholdVeryPrecise.png}}
+    \caption{Thresholding of the surface/toric/cylinder code using the MWPM decoder implemented in the PyMatching \cite{MWPMDecoder} library.
     Generating code can be found in Appendix \ref{App: surface_thresholding}}
     \label{fig:surface_threshold}
-  \end{figure}
+\end{figure}
 
-Using this error model, we found a threshold of $16.3\pm 0.5 \%$ from
-figure \ref{fig:surface_threshold} and $16.0\pm 0.5\%$ from figure
-\ref{fig:toric_threshold} for the surface and toric code respectively. 
+Using this error model, we found a threshold of $16.3\pm 0.5 \%$ for the surface code
+and $16.0\pm 0.5\%$ from
+figures b) and d) in \ref{fig:surface_threshold}. 
 Their thresholds are within single error margins of each other, and 
 can therefore be called identical.
 
-\begin{figure}[h!]
-    \centering
-    \subfigure[Toric code MWPM thresholding overview]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/toricThresholdOverview.png}}\hfill
-    \subfigure[Detailed view for precise threshold determination]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/toricThresholdVeryPrecise.png}}
-    \caption{Thresholding of the Toric code using the MWPM decoder implemented in the PyMatching \cite{MWPMDecoder} library.
-    Generating code can be found in Appendix \ref{App: surface_thresholding}}
-    \label{fig:toric_threshold}
-\end{figure}
-\newpage
 Since the Steane code for which we generated a lookup table is not 
 a distance-scalable code, only a $pseudo$-threshold can
 be found here, i.e. the crossing point to worse performance than unencoded
 information. As can be seen in figure \ref{fig: steane_threshold}, the
-pseudo-threshold is somehow very bad. I do not know why.
+pseudo-threshold lies around $(1 \pm 0.5)10^{-5}$.
 
 \begin{figure}[h!]
-	\begin{center}
+	\centering
 	\captionsetup{justification=centering,margin=2cm}
-	\includegraphics[scale=0.4]{./img/figures/thresholds/steaneLookupThreshold.png}\\
+    \subfigure[Lookup table Steane code threshold]{\includegraphics[width=0.4\textwidth]{./img/figures/thresholds/steaneLookupThreshold.png}}\hfill
+	\subfigure[Detailed view at around $per=10^{-5}$]{\includegraphics[width=0.4\textwidth]{./img/figures/thresholds/steaneLookupThresholdPrecise.png}}\hfill
 	\caption{Lookup table pseudo threshold for the Steane code, generating code can be found in Appendix
     \ref{App: steane_thresholding}}
         
 	\label{fig: steane_threshold}
-	\end{center}
 \end{figure}
 
-\newpage
 
-On the color code, we found a threshold of $<0.0001\%$ using the 
-lookup table decoder on the Steane code and could not find a threshold
-for the scalable hexagonal toric color code, as our code does not work there yet.
+Unfortunately, a threshold for the hexagonal toric color code using the lifting
+decoder could not be found due to a lifting bug resulting in false error predictions 
+for certain error patterns.
 
 % $c\pm b\%$ using the 
 % lifting decoder for the scalable hexagonal toric color code. 

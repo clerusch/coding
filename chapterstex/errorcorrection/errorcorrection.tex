@@ -1,4 +1,19 @@
+The concept of (classical) error-correcting codes (ECC) was
+introduced by Claude Shannon in 1948\cite{shannon}.
+Fundamentally, an ECC encodes $logical$ information within
+a large superset of basic information carriers.
 
+In the case of a classical computer, this means encoding a
+bitstring within a system containing more physical bits
+than the length of the encoded message, with the goal of message transmission
+being resilient to some bits being faulty or subject to interference (i.e. EM-interference).
+
+Analogously, in the case of a quantum computer this means encoding a \emph{logical}
+qubit within a system of multiple qubits, with a similar goal of resilience towards
+errors caused by external influences.
+
+In this chapter, we will give an overview of different quantum error correction codes,
+starting with adaptations of classical codes.
 \input{chapterstex/errorcorrection/linearcodes/linearcodes}
 \newpage
 \input{chapterstex/errorcorrection/errormodel}

@@ -6,30 +6,23 @@ In this thesis, we will
 focus on \emph{qubit}-based systems, i.e. two-level quantum systems as base 
 units of computation.
 
-In the following, we will analyze quantum circuit diagrams using the different
-pictures of quantum mechanics.
+In this chapter, we will analyze a quantum circuit diagram using different
+pictures of quantum mechanics, namely the Schroedinger and the Heisenberg picture.
 A quantum circuit diagram is a visual representation of the computation done
 in a quantum computer, whereby:
 \begin{itemize}
 	\item States progress in time along horizontal parallel lines
 	\item Time goes from left to right
-	\item Gates denoted X,Y,Z are the single qubit Pauli operators
+	\item what kind of gates?
+	\item Gates denoted X, Y, Z are the single qubit Pauli operators
 		$\sigma_x,\sigma_y,\sigma_z$
+    \item $M_{\{X,Y,Z\}^n}$ denotes an n qubit measurement of \{X,Y,Z\}
 	\item Gates can act on one or multiple qubits, whereby an X gate 
-		on qubit 1 in a 3-qubit system should be interpreted as:
-		\\$(X\otimes \mathbb{I} \otimes \mathbb{I}) (|\psi_1\rangle
-		\otimes |\psi_2\rangle \otimes |\psi_3\rangle)$
+		on qubit 1 in a 3-qubit system should be interpreted as
+		\\$(X\otimes \mathbb{I} \otimes \mathbb{I}) |\psi_{1,2,3}\rangle$
 \end{itemize}
-\begin{figure}[h!]
-	\begin{center}
-	\captionsetup{justification=centering,margin=2cm}
-	\includegraphics[scale=0.4]{img/figures/cnotMeasureCircuit.png}\\
-	\caption{A Quantum Circuit to implement a measurement based\\
-		Controlled-$X_{|\psi\rangle_{control}\rightarrow |\psi\rangle_{target}}$ Gate,
-		where $|0\rangle$ is the +1 eigenstate in $\sigma_{z}$-basis.}
-	\label{fig:circuit1}
-	\end{center}
-\end{figure}
+
+\input{./chapterstex/intro/clifford}
+
 \input{./chapterstex/intro/pictures}
 \newpage
-\input{./chapterstex/intro/clifford}

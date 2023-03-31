@@ -8,9 +8,14 @@ error rate, the least amount of errors leading to an error is the most
 probable event.
 
 This decoding scheme is particularly useful for small codes, as well 
-as non-topological (random) LDPC (Low-Density-Parity-Check) codes.
+as non-topological (random) LDPC (Low-Density-Parity-Check) codes, since
+these cannot be decoded using graph theory.
 A big issue with this decoding scheme is that generating lookup tables is
-extremely computationally expensive $(O(2^n))$. This renders it practically
+extremely computationally expensive ($O(2^n)$, since a syndrome must be computed
+and stored for every possible error vector, having length n and 2 possibilities per
+entry). 
+
+This renders it practically
 unfeasible to generate lookup tables for codes with a larger number
 of total data qubits.
 
@@ -29,8 +34,8 @@ of total data qubits.
 In figure \ref{fig: lookup_table} is an example of the lookup table result for
 an X error on qubit 7 (the central qubit) on the Steane code. 
 The resulting syndrome is (1,1,1,0,0,0), with the first three
-bits indicating the steane code faces X reaction, and the second three bits
-indicating the Steane code faces Z reaction. 
+bits indicating the steane code faces X checks, and the second three bits
+indicating the Steane code faces Z checks. 
 The lookup table will return a set of many possible errors resulting in 
 that syndrome, but simply choosing the one with the least number of errors 
 (minimum weight) gives the correct error prediction.

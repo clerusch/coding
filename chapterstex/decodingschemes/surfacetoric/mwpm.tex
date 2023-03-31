@@ -11,7 +11,8 @@
     \item Repeat until no augmenting path is found.
 \end{enumerate}
 This decoding scheme has the advantage of being guaranteed
-to find a global optimum of decoding edge paths.
+to find a global optimum of decoding edge paths, i.e. it finds the shortest vector
+of edges that are bounded by the syndrome nodes.
 Under the assumption of high error rates and/or large decoding 
 graphs, this scheme also requires significantly less
 computational memory overhead than the union-find scheme

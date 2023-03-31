@@ -7,7 +7,7 @@ g = nx.Graph()
 
 # we want a 48 node toric color code, like in the delfosse paper
 g.add_nodes_from([i for i in range(1,49)])
-def connectionmaker(g):
+def connectionmaker(g) -> bool:
     rgb = set("r")
     rgb.add("g")
     rgb.add("b")

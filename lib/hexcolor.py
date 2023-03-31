@@ -7,7 +7,7 @@ from typing import List, FrozenSet, Set
 from os import makedirs
 from os.path import exists
 from time import time
-from matplotlib.pyplot import figure, savefig, title, show, xlabel, ylabel, legend, errorbar, close
+from matplotlib.pyplot import figure, savefig, title, show, xlabel, ylabel, legend, errorbar, close, plot
 """
 The main function of this file will generate a set of images
 of the pertaining color code graph, its dual, and its respective 
@@ -358,6 +358,7 @@ def cc_threshold_plotter(dists: List[any], pers: List[float], nr:int, file=None)
     for dist, logical_errors in zip(dists, log_errors_all_dist):
         std_err = (logical_errors*(1-logical_errors)/nr)**0.5
         errorbar(pers, logical_errors, yerr=std_err, label="L={}".format(dist))
+    plot(pers, pers, label = 'Threshold')
     xlabel("Physical error rate")
     ylabel("Logical error rate")
     legend(loc=0)
@@ -371,52 +372,51 @@ def cc_threshold_plotter(dists: List[any], pers: List[float], nr:int, file=None)
     return True
 
 def main() -> bool:
-    """
-    while True:
-        lets stash this
-        #### just making sure image filesaves work
-        if not exists("img/hexcolor"):
-            makedirs("img/hexcolor")
-        #### initialize color code graph with errors
-        origG = make_a_base_graph()
-        actual_errors = flag_color_graph(origG, 0.05)
-        ## This is for manually setting faults
-        # actual_errors = [(0,0),(1,2)]
-        # flag_c_graph_specific(origG, actual_errors)
-        #### dualizing and subtiling
-        dual, faces = dual_of_three_colored_graph(origG)
-        subr, subg, subb = subtile(dual, 'r'), subtile(dual, 'g'), subtile(dual, 'b')
-        #### flag syndromes yellow for better visualizing
-        dual_syn, subr_syn, subg_syn, subb_syn = make_a_shower(dual), make_a_shower(subr), make_a_shower(subg), make_a_shower(subb)
-        #### decoding part
-        start = time()
-        pred_r, pred_g, pred_b = decode_subtile(subr), decode_subtile(subg), decode_subtile(subb)
-        hyper_edge_cycles = find_hyper_edges(dual, pred_r, pred_g, pred_b)
-        ## get back to og nodes from dual nodes/ faces
-        print("hyp_edge_cycles are: ", hyper_edge_cycles)
-        og_enc_nodes_by_dual_cycles = lift(hyper_edge_cycles, faces)
-        end = time()
-        #### visualizing part
-        print(f"This decoding and lifting took {end-start} seconds.")
-        draw_graph_with_colored_edges_and_nodes(origG, "img/hexcolor/original.png")
-        draw_graph_with_colored_edges_and_nodes(dual_syn, "img/hexcolor/dual.png")
-        for i, graph in enumerate([subr_syn, subg_syn, subb_syn]):      
-            draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
-        # print("The red prediction is: ", pred_r)
-        # print("The green prediction is: ", pred_g)
-        # print("The blue prediction is: ", pred_b)
-        # print("Hyperedges are: ", hyper_edges)
-        if og_enc_nodes_by_dual_cycles:
-            for i in range(len(og_enc_nodes_by_dual_cycles)):
-                print(f"The {i}th error node on the graph is {og_enc_nodes_by_dual_cycles.pop()}")
-        print("The actual errors were: ", actual_errors)
-        return True
-    """
-    dists = [(6,4),(12,8),(24,8)]
-    pers = linspace(0.003, 0.03, 20)
-    nr = 500
-    cc_threshold_plotter(dists, pers, nr, "firstThreshold")
+
+   
+    #### just making sure image filesaves work
+    if not exists("img/hexcolor"):
+        makedirs("img/hexcolor")
+    #### initialize color code graph with errors
+    origG = make_a_base_graph()
+    actual_errors = flag_color_graph(origG, 0.05)
+    ## This is for manually setting faults
+    # actual_errors = [(0,0),(1,2)]
+    # flag_c_graph_specific(origG, actual_errors)
+    #### dualizing and subtiling
+    dual, faces = dual_of_three_colored_graph(origG)
+    subr, subg, subb = subtile(dual, 'r'), subtile(dual, 'g'), subtile(dual, 'b')
+    #### flag syndromes yellow for better visualizing
+    dual_syn, subr_syn, subg_syn, subb_syn = make_a_shower(dual), make_a_shower(subr), make_a_shower(subg), make_a_shower(subb)
+    #### decoding part
+    start = time()
+    pred_r, pred_g, pred_b = decode_subtile(subr), decode_subtile(subg), decode_subtile(subb)
+    hyper_edge_cycles = find_hyper_edges(dual, pred_r, pred_g, pred_b)
+    ## get back to og nodes from dual nodes/ faces
+    print("hyp_edge_cycles are: ", hyper_edge_cycles)
+    og_enc_nodes_by_dual_cycles = lift(hyper_edge_cycles, faces)
+    end = time()
+    #### visualizing part
+    print(f"This decoding and lifting took {end-start} seconds.")
+    draw_graph_with_colored_edges_and_nodes(origG, "img/hexcolor/original.png")
+    draw_graph_with_colored_edges_and_nodes(dual_syn, "img/hexcolor/dual.png")
+    for i, graph in enumerate([subr_syn, subg_syn, subb_syn]):      
+        draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
+    # print("The red prediction is: ", pred_r)
+    # print("The green prediction is: ", pred_g)
+    # print("The blue prediction is: ", pred_b)
+    # print("Hyperedges are: ", hyper_edges)
+    if og_enc_nodes_by_dual_cycles:
+        for i in range(len(og_enc_nodes_by_dual_cycles)):
+            print(f"The {i}th error node on the graph is {og_enc_nodes_by_dual_cycles.pop()}")
+    print("The actual errors were: ", actual_errors)
     return True
+
+    # dists = [(6,4)]#,(12,8),(24,8)]
+    # pers = linspace(0.01, 0.2, 20)
+    # nr = 1000
+    # cc_threshold_plotter(dists, pers, nr, "firstThreshold")
+    # return True
 
 if __name__ == "__main__":
     main()
