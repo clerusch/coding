@@ -1,12 +1,12 @@
 \subsubsection{Lifting decoder}\label{sec: lifting}
 The Lifting decoder works as follows:
 \begin{itemize}
-    \item Create dual of Tanner graph
+    \item Create dual of color code graph
     \item Generate single-edge-colored subgraphs of the dual
     \item Decode subgraphs using MWPM/Union-Find
     \item Unify all edges from subgraph corrections
     \item Find all shortest-length loops on this union
-    \item NOLIFTING CASE ????
+    \item If there are remaining edges not forming a loop, abort the liftin procedure
     \item All nodes bounded by the faces that are elements of the shortest-length loop sets
     are error nodes. 
 \end{itemize}
@@ -24,7 +24,7 @@ graph \cite{delfosse}.
     yellow marked nodes represent syndromes.]{\includegraphics[width=0.4\textwidth]{img/figures/dual.png}}\hfill
     \subfigure[Red subgraph to be decoded via MWPM]{\includegraphics[width=0.4\textwidth]{img/figures/0.png}}\hfill
     \subfigure[Correct error prediction output for single distributed error nodes.]{\includegraphics[width=0.4\textwidth]{img/figures/correctLiftingPred.png}}
-    \caption{Steps in the lifting decoder. Generating code can be found in\ref{App: lifting}\
+    \caption{Steps in the lifting decoder. Generating code can be found in \ref{App: lifting}\
     and the entire git repository can be found in \cite{clemens}}
     \label{fig: lifting}
 \end{figure}
