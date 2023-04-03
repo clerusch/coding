@@ -107,30 +107,31 @@ In this case, a,b and c would each be zero, therefore no further gate would be a
 As intended, this state is equivalent to 
 $CNOT_{|\psi_{Control}\rangle\rightarrow |\psi_{Target}\rangle} |\phi_{t=0}\rangle$.
 \\
-If the last measurement result is -1:
-\begin{align*}
-	|\phi^{++-}_{t=3}\rangle 
-	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}-
-	\mathbb{I}\otimes X \otimes \mathbb{I}\right)|\phi^{++}_{t=2}\rangle\\
-	&= \frac{1}{2}((|010\rangle + |000\rangle)\langle000|
-	+ (|001\rangle-|011\rangle )\langle001|\\
-	&+ (|010\rangle-|000\rangle)\langle010|
-	+ (|011\rangle-|001\rangle)\langle011|\\
-	&+ (|100\rangle-|110\rangle)\langle100|
-	+ (|101\rangle-|111\rangle)\langle101|\\
-	&+ (|110\rangle-|100\rangle)\langle110|
-	+ (|111\rangle-|101\rangle)\langle111|)
-	|\phi^{++}_{t=2}\rangle\\
-	&= \frac{1}{2}(\alpha \left( 
-	TODOTODOTODOTODOTODO
-	\gamma (|000\rangle + |010\rangle)+
-	\delta (|011\rangle + |001\rangle) \right) \\
-	&+ \beta \left( 
-	\gamma (|101\rangle + |111\rangle)+
-	\delta (|100\rangle + |110\rangle) \right))
-\end{align*}
+% If the last measurement result is -1:
+% \begin{align*}
+% 	|\phi^{++-}_{t=3}\rangle 
+% 	&= \frac{1}{2}\left(\mathbb{I}\otimes\mathbb{I}\otimes\mathbb{I}-
+% 	\mathbb{I}\otimes X \otimes \mathbb{I}\right)|\phi^{++}_{t=2}\rangle\\
+% 	&= \frac{1}{2}((|010\rangle + |000\rangle)\langle000|
+% 	+ (|001\rangle-|011\rangle )\langle001|\\
+% 	&+ (|010\rangle-|000\rangle)\langle010|
+% 	+ (|011\rangle-|001\rangle)\langle011|\\
+% 	&+ (|100\rangle-|110\rangle)\langle100|
+% 	+ (|101\rangle-|111\rangle)\langle101|\\
+% 	&+ (|110\rangle-|100\rangle)\langle110|
+% 	+ (|111\rangle-|101\rangle)\langle111|)
+% 	|\phi^{++}_{t=2}\rangle\\
+% 	&= \frac{1}{2}(\alpha \left( 
+% 	TODOTODOTODOTODOTODO
+% 	\gamma (|000\rangle + |010\rangle)+
+% 	\delta (|011\rangle + |001\rangle) \right) \\
+% 	&+ \beta \left( 
+% 	\gamma (|101\rangle + |111\rangle)+
+% 	\delta (|100\rangle + |110\rangle) \right))
+% \end{align*}
 Notably, each measurement sequence has a differing resulting ancilla state, 
 however we do not care since ancillas are meant to be discarded.
 \\
-For now, the other 7 final computation steps are left as an exercise
-to the reader, however I probably will still finish that.
+Verifying that the other 7 measurement/computation paths also yield a CNOT implementation
+is left as an exercise to the reader.
+\newpage

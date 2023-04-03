@@ -1,28 +1,34 @@
-A quantum computer operates on so-called $qudits$, which can be
-any multi-level quantum system. 
-Physical implementations of these include particles with 
-spin, as well as controlled EM waves, i.e. lasers. \\
-In this thesis, we will
-focus on \emph{qubit}-based systems, i.e. two-level quantum systems as base 
-units of computation.
+In the last few years quantum computers have been the focus of intense research
+since they are expected to be able to solve problems that are intractable for
+classical computers. 
+Quantum computers employ principles of quantum mechanics, whereby states can exist
+in superpositions of multiple states, and can be entangled, i.e. correlated
+in order to perform computation.
 
-In this chapter, we will analyze a quantum circuit diagram using different
-pictures of quantum mechanics, namely the Schroedinger and the Heisenberg picture.
-A quantum circuit diagram is a visual representation of the computation done
-in a quantum computer, whereby:
-\begin{itemize}
-	\item States progress in time along horizontal parallel lines
-	\item Time goes from left to right
-	\item what kind of gates?
-	\item Gates denoted X, Y, Z are the single qubit Pauli operators
-		$\sigma_x,\sigma_y,\sigma_z$
-    \item $M_{\{X,Y,Z\}^n}$ denotes an n qubit measurement of \{X,Y,Z\}
-	\item Gates can act on one or multiple qubits, whereby an X gate 
-		on qubit 1 in a 3-qubit system should be interpreted as
-		\\$(X\otimes \mathbb{I} \otimes \mathbb{I}) |\psi_{1,2,3}\rangle$
-\end{itemize}
+One area where quantum computers are expected to be able to outperform classical
+computers is decrypting RSA encryption by efficiently factoring large 
+numbers. 
+This has recently been shown by researchers at the Beijing
+Academy of Quantum Information Sciences to require merely 10 error-corrected
+ qubits~\cite{beijing} to efficiently factor a 40-bit length number,
+and is estimated to require merely 372 error-corrected qubits to efficiently decrypt
+2048-bit RSA encryption.
+It can therefore with high confidence be said that within the next decade
+RSA encryption will no longer be viable for protecting sensitive data.
 
-\input{./chapterstex/intro/clifford}
+Others include simulations of quantum systems, which can be of great use in
+medical research and quantum chemistry, as well as optimization problems, which
+are of great use in logistics and scheduling.
+Further, the quantum Fourier transform, which is a quantum algorithm that
+can be used to efficiently compute the discrete Fourier transform, can be used for 
+things like computing ideal signal output from 5G towers to minimize interference.
+While providing significantly less advantage over classical computers than the 
+aforementioned applications, the quantum search algorithm also provides a 
+square-root improvement in the time complexity of searching for a specific item in 
+a database, which could also have wide applications.
 
-\input{./chapterstex/intro/pictures}
-\newpage
+In order to be able to use quantum computers for these applications, we need to
+ensure their resiliency towards errors introduced by thermal, electromagnetic and 
+other noise. 
+This can be done via Quantum Error Correction (QEC) codes, which we will introduce
+and discuss in this thesis.

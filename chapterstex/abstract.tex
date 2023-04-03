@@ -1,2 +1,23 @@
-In this thesis I will propose a color code decoding algorithm
-and provide an implementation of it.
+The study of Quantum Error Correction (QEC) is essential to the development
+of quantum computers, as it provides a way to protect quantum
+information from errors that can occur in 
+a real-world setting subject to electromagnetic/thermal and other noise.
+
+In this thesis, we will give an overview of the quantum error correction codes 
+and introduce decoding schemes for the color code, a QEC code that uses
+three colorable three-regular graph configurations of stabilizers
+to perform quantum error correction.
+
+We also compare the thresholding performance of various ECC codes and decoding 
+schemes, finding a pseudo-threshold of $10^{-3}\%$ for the Steane color code using a 
+lookup table decoder and around 16\% for the MWPM Surface/Toric/Cylindric codes.
+While unable to determine these Thresholds more precisely due to computational
+limitations, the author believes that upon further calculation the Cylindric code
+could be found to have a threshold that lies between the higher surface code threshold
+and the lower toric code threshold.
+An attempt was made at constructing a lifting decoder for a toric hexagonal 
+honeycomb lattice color code and a step-by-step guide to this construction is 
+included, however this decoder is incomplete and only works for a small subset of 
+possible errors (individually occurring ones) due to a bug in 
+the lifting procedure and is therefore 
+not included in the thresholding comparison.
