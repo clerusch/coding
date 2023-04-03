@@ -1,7 +1,14 @@
 \subsubsection{MWPM decoding}
+The \emph{Minimum-Weight Perfect Matching} algorithm is a variant of 
+Dijkstra's algorithm that can be used to find the shortest vector of edges
+that are bounded by the input syndrome nodes.
+The algorithm is as follows:
 \begin{enumerate}
     \item Find a set of unmatched nodes that can be reached from the 
-    matching by alternating between matched and unmatched edges. 
+    Matching\footnote{In graph theory, a matching is a subset of graph
+    edges such that no two edges share a common vertex. The Goal of the MWPM
+    algorithm is to find a Matching with minimum weight, i.e. a shortest vector of
+    edges} by alternating between matched and unmatched edges. 
     Call these nodes "augmenting nodes".
     \item Find an augmenting path starting from each augmenting node,
     i.e. a path that starts and ends with an unmatched node, and
@@ -10,8 +17,9 @@
     to unmatched, and vice versa.
     \item Repeat until no augmenting path is found.
 \end{enumerate}
+
 This decoding scheme has the advantage of being guaranteed
-to find a global optimum of decoding edge paths, i.e. it finds the shortest vector
+to find a global optimum of decoding edge paths, i.e. it always finds the shortest vector
 of edges that are bounded by the syndrome nodes.
 Under the assumption of high error rates and/or large decoding 
 graphs, this scheme also requires significantly less

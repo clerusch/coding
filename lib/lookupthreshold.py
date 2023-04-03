@@ -16,13 +16,11 @@ def genSteaneError(per)->ndarray:
     for j in range(len(zerror)):
         if random()<per:
             zerror[j] = 1
-    yerror = concatenate((xerror,zerror)) # generating too long errors
+    yerror = concatenate((xerror,zerror)) 
     for k, bit in enumerate(yerror[:6]):
         if random()<per:
             yerror[k] = (yerror[k] + 1)%2
             yerror[2*k] = (yerror[2*k]+1)%2
-    # error = (concatenate((xerror, empty7)) + yerror \
-    #     + concatenate((empty7, zerror)))%2
     return yerror
 
 def steaneLerCalc(steaneH, nr, per, logicals)->float:

@@ -1,4 +1,4 @@
-In the last few years quantum computers have been the focus of intense research
+In the last few years, quantum computers have been the focus of intense research
 since they are expected to be able to solve problems that are intractable for
 classical computers. 
 Quantum computers employ principles of quantum mechanics, whereby states can exist
@@ -13,22 +13,43 @@ Academy of Quantum Information Sciences to require merely 10 error-corrected
  qubits \cite{beijing} to efficiently factor a 40-bit length number,
 and is estimated to require merely 372 error-corrected qubits to efficiently decrypt
 2048-bit RSA encryption.
-It can therefore with high confidence be said that within the next decade
+It is therefore likely that within the next decade
 RSA encryption will no longer be viable for protecting sensitive data.
 
 Others include simulations of quantum systems, which can be of great use in
 medical research and quantum chemistry, as well as optimization problems, which
 are of great use in logistics and scheduling.
-Further, the quantum Fourier transform, which is a quantum algorithm that
-can be used to efficiently compute the discrete Fourier transform, can be used for 
+Further, the Quantum Fourier Transform, which is a quantum algorithm that
+can be used to efficiently compute the Discrete Fourier Transform, can be used for 
 things like computing ideal signal output from 5G towers to minimize interference.
 While providing significantly less advantage over classical computers than the 
 aforementioned applications, the quantum search algorithm also provides a 
 square-root improvement in the time complexity of searching for a specific item in 
-a database, which could also have wide applications.
+a database, which could also have widespread applications.
 
 In order to be able to use quantum computers for these applications, we need to
 ensure their resiliency towards errors introduced by thermal, electromagnetic and 
 other noise. 
 This can be done via Quantum Error Correction (QEC) codes, which we will introduce
 and discuss in this thesis.
+
+A quantum computer operates on so-called $qudits$, which can be
+any multi-level quantum system. 
+Physical implementations of these include particles with 
+spin as well as optical implementations. 
+In this thesis, we will
+focus on \emph{qubit}-based systems, i.e. two-level quantum systems as base 
+units of computation.
+
+In Chapter \ref{sec:background} we will introduce the basic QEC terminology and pictures with which
+to analyze quantum circuits.
+
+In Chapter \ref{sec:errordetection} we will introduce the different types of QEC codes, namely the Surface,
+Toric and Color codes as well as their construction via Hypergraph products of classical
+codes.
+
+In Chapter \ref{sec:decodingschemes} we will go over the different decoding schemes for QEC codes, such as 
+the MWPM, Union-Find and Lifting decoders. 
+
+In Chapter \ref{sec:thresholds} we will discuss and compare the simulated thresholds for these codes
+using introduced decoding schemes.

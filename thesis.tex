@@ -45,6 +45,7 @@
 Advised by Peter-Jan Derks}
 
 \begin{document}
+\pagenumbering{gobble} % Remove page numbering
 \maketitle
 \begin{abstract}
     \begin{center}
@@ -52,20 +53,24 @@ Advised by Peter-Jan Derks}
     \end{center}
 \end{abstract}
 \newpage
+
 \tableofcontents
 \newpage
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
 \section{Introduction}
 \input{chapterstex/intro/intro}
-\newpage
-\section{Background}
+
+\section{Background}\label{sec:background}
 \input{chapterstex/intro/back}
 \newpage
-\section{Error detection and correction}
+\section{Error detection and correction}\label{sec:errordetection}
 \input{chapterstex/errorcorrection/errorcorrection}
 \newpage
-\section{Decoding Schemes}
+\section{Decoding Schemes}\label{sec:decodingschemes}
 \input{chapterstex/decodingschemes/decodingschemes}
-\section{Thresholds}
+\section{Thresholds}\label{sec:thresholds}
 \input{chapterstex/thresholds}
 \section{Conclusion}
 \input{chapterstex/conclusion}
@@ -78,4 +83,6 @@ Advised by Peter-Jan Derks}
 \input{chapterstex/appendix/lookupapp}
 \input{chapterstex/appendix/lifting}
 \input{chapterstex/appendix/thresholds}
+\newpage
+\input{chapterstex/eidversicherung}
 \end{document}

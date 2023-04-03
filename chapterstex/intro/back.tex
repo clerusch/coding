@@ -1,11 +1,3 @@
-A quantum computer operates on so-called $qudits$, which can be
-any multi-level quantum system. 
-Physical implementations of these include particles with 
-spin, as well as controlled EM waves, i.e. lasers. \\
-In this thesis, we will
-focus on \emph{qubit}-based systems, i.e. two-level quantum systems as base 
-units of computation.
-
 In this chapter, we will analyze a quantum circuit diagram using different
 pictures of quantum mechanics, namely the Schroedinger and the Heisenberg picture.
 A quantum circuit diagram is a visual representation of the computation done
@@ -14,12 +6,12 @@ in a quantum computer, whereby:
 	\item States progress in time along horizontal parallel lines
 	\item Time goes from left to right
 	\item Gates are unitary matrix operators
-	\item Gates denoted X, Y, Z are the single qubit Pauli operators
+	\item Gates denoted $X$, $Y$, $Z$ are the single qubit Pauli operators
 		$\sigma_x,\sigma_y,\sigma_z$
 	\item Gates can act on one or multiple qubits, whereby an X gate 
 		on qubit 1 in a 3-qubit system should be interpreted as
-		\\$(X\otimes \mathbb{I} \otimes \mathbb{I}) |\psi_{1,2,3}\rangle$
-    \item $M_{\{X,Y,Z\}^n}$ denotes an n qubit measurement of \{X,Y,Z\} 
+		$(X\otimes \mathbb{I} \otimes \mathbb{I}) |\psi_{1,2,3}\rangle$
+    \item $M_{\{X,Y,Z\}^n}$ denotes an $n$ qubit measurement of $\{X,Y,Z\}$ 
 \end{itemize}
 
 \input{./chapterstex/intro/clifford}

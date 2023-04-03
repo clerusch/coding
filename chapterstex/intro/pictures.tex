@@ -10,6 +10,7 @@ a projection $P$, so:
 \begin{equation}
     P_M^{\pm} |\psi\rangle = \frac{(M\pm \mathbb{I})|\psi\rangle}{2}
 \end{equation}
+
 Where $M$ is a matrix representation of the physical observable
  to be measured.
 For example, a measurement of a single qubit's spin along the z-axis would be
@@ -22,6 +23,7 @@ represented as:
         \end{array}
         \right)
 \end{equation}
+
 And that measurement would perform a projection $P_Z$:
 \begin{equation}
     P_Z^+ = \left(
@@ -38,8 +40,8 @@ And that measurement would perform a projection $P_Z$:
         \end{array}
         \right)
 \end{equation}
-on the state, depending on whether the measurement result yielded $+1$ or $-1$.
 
+on the state, depending on whether the measurement result yielded $+1$ or $-1$.
 Therefore, to calculate the output of a quantum circuit in the Schroedinger
 picture, simply apply the measurements and gates on the input states.
 \begin{figure}[h!]
@@ -61,7 +63,7 @@ finding that it results in an equal output.
 
 \subsection{Heisenberg picture and stabilizer formalism}
 \subsubsection{Stabilizer group}
-We call an operator/gate S, to which the input state is an
+We call an operator/gate $S$, to which the input state is an
 eigenvector ($S|\psi\rangle=|\psi\rangle$), a $stabilizer$ of that input state. 
 For $n$-qubit systems, we write these stabilizers as $n$-tensor-products 
 of pauli operators $P \in P_{G}$,
@@ -102,15 +104,14 @@ A stabilizer group is always an abelian group i.e. its elements
 
 \subsubsection{Effect of gates on stabilizers}
 To determine the effect a gate operation A has on a
-stabilizer, consider the following:
-
+stabilizer, consider the following.
 If $S|\psi\rangle = |\psi\rangle$ then:
 \begin{equation}
 A|\psi\rangle = AS|\psi\rangle = AS\mathbb{I}|\psi\rangle
 	= \underbrace{ASA^{\dagger}}_{=S'}A|\psi\rangle
 \end{equation}
-So we now know that the post-gate state is an eigenstate of $S'$.
 
+So we now know that the post-gate state is an eigenstate of $S'$.
 Therefore $S'_{G} = \langle AS_{0}A^{\dagger},...,AS_{n}A^{\dagger}\rangle$.
 
 
@@ -131,7 +132,6 @@ least one operator in $S_{G}$, since Pauli operators as well as
 their tensor products can only commute or anti-commute with each
 other. The product of two operators that both anticommute with another operator
 will then commute with that operator.
-
 So in order to obtain the new stabilizers  $S'_{G}$:
 \begin{enumerate}
 	\item Identify $S\in S_{G}: \{S,M\}=0$
@@ -142,19 +142,18 @@ So in order to obtain the new stabilizers  $S'_{G}$:
 \end{enumerate}
 where $\overline{X}$ and $\overline{Z}$ are the sets of 
 logical X and Z operators respectively. A logical operator is
-an operator which acts on a systems metastructure that can be treated
-as its own qubit.
+an operator which maps an eigenstate of a systems stabilizers
+to another eigenstate of those stabilizers.
 
 \subsubsection{Circuit Analysis in Stabilizer formalism}
 
 In the following, stabilizers
 will be written without the tensor product symbols, so in 
 our case the stabilizer is initially: $S_{G}^{0}= \langle IZI \rangle$,
-the logical $\overline{X}$ operator is XXX and the logical
-$\overline{Z}$ operator is ZIZ.
-
- In the circuit shown in 
-Figure~\ref{fig:circuit1}, the measurements project onto:
+the logical $\overline{X}$ operator is $IXI$ and the logical
+$\overline{Z}$ operator is $ZIZ$.
+In the circuit shown in 
+Figure \ref{fig:circuit1}, the measurements project onto:
 
 \begin{align}
 	P^{\pm}_{1} &= \frac{1}{2}\left(\mathbb{I}^{\otimes 3} \pm 
@@ -212,7 +211,6 @@ measurement operator.
 
 The stabilizer for the control and target qubit is still
 identity, and logical $\overline{Z}: ZIZ \rightarrow IIZ$.
-
 Since this circuit maps $Z_{control}\otimes Z_{target} \mapsto I_{control}
  \otimes Z_{target}$,
 and via a similar analysis it can be shown that it also maps

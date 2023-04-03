@@ -24,30 +24,30 @@ pseudo-threshold lies around $(1 \pm 0.5)10^{-5}$.
 \begin{figure}[h!]
 	\centering
 	\captionsetup{justification=centering,margin=2cm}
-    \subfigure[Lookup table Steane code threshold]{\includegraphics[width=0.4\textwidth]{./img/figures/thresholds/steaneLookupThreshold.png}}\hfill
-	\subfigure[Detailed view at around $per=10^{-5}$]{\includegraphics[width=0.4\textwidth]{./img/figures/thresholds/steaneLookupThresholdPrecise.png}}\hfill
+    \subfigure[Lookup table Steane code threshold]{\includegraphics[width=0.5\textwidth]{./img/figures/thresholds/steaneLookupThreshold.png}}\hfill
+	\subfigure[Detailed view at around $per=10^{-5}$]{\includegraphics[width=0.5\textwidth]{./img/figures/thresholds/steaneLookupThresholdPrecise.png}}\hfill
 	\caption{Lookup table pseudo threshold for the Steane code, generating code can be found in Appendix
     \ref{App: steane_thresholding}}
         
 	\label{fig: steane_threshold}
 \end{figure}
 
-\begin{figure}[h!]
+A prototype for a scalable lifting decoder for the hexagonal toric color code 
+that only corrects separate individual errors was  implemented in \ref{App: lifting}.
+\begin{figure}[H]
     \centering
-    \subfigure[Surface code MWPM thresholding overview]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/surfaceThresholdOverview.png}}\hfill
-    \subfigure[Detailed view for precise threshold determination of surface code]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/surfaceThresholdVeryPrecise.png}}
-    \subfigure[Toric code MWPM thresholding overview]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/toricThresholdOverview.png}}\hfill
-    \subfigure[Detailed view for precise threshold determination of toric code]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/toricThresholdVeryPrecise.png}}
-    \subfigure[Cylinder code MWPM thresholding overview]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/cylinderThresholdOverview.png}}\hfill
-    \subfigure[Detailed view for precise threshold determination of cylinder code]{\includegraphics[width=0.4\textwidth]{img/figures/thresholds/cylinderThresholdVeryPrecise.png}}
+    \subfigure[Surface code MWPM thresholding overview]{\includegraphics[width=0.5\textwidth]{img/figures/thresholds/surfaceThresholdOverview.png}}\hfill
+    \subfigure[Detailed view for precise threshold determination of surface code]{\includegraphics[width=0.5\textwidth]{img/figures/thresholds/surfaceThresholdVeryPrecise.png}}
+    \subfigure[Toric code MWPM thresholding overview]{\includegraphics[width=0.5\textwidth]{img/figures/thresholds/toricThresholdOverview.png}}\hfill
+    \subfigure[Detailed view for precise threshold determination of toric code]{\includegraphics[width=0.5\textwidth]{img/figures/thresholds/toricThresholdVeryPrecise.png}}
+    \subfigure[Cylinder code MWPM thresholding overview]{\includegraphics[width=0.5\textwidth]{img/figures/thresholds/cylinderThresholdOverview.png}}\hfill
+    \subfigure[Detailed view for precise threshold determination of cylinder code]{\includegraphics[width=0.5\textwidth]{img/figures/thresholds/cylinderThresholdVeryPrecise.png}}
     \caption{Thresholding of the surface/toric/cylinder code using the MWPM decoder implemented in the PyMatching \cite{MWPMDecoder} library.
     Generating code can be found in Appendix \ref{App: surface_thresholding}}
     \label{fig:surface_threshold}
 \end{figure}
 
-Unfortunately, a threshold for the hexagonal toric color code using the lifting
-decoder could not be found due to a lifting bug resulting in false error predictions 
-for certain error patterns.
+
 
 % $c\pm b\%$ using the 
 % lifting decoder for the scalable hexagonal toric color code. 

@@ -226,9 +226,6 @@ def decode_subtile(graph: nx.Graph) -> List[any]:
     Returns:
         prediction(List[edges]): predicted error edges on graph
     """
-    # we'll change og and revert this time
-    # renamed_copy = graph.copy()
-    # make renamed_copy usable (hopefully)
     for i, node in enumerate(graph.nodes):
         graph.nodes[node]['og_name'] = node
         graph = nx.relabel_nodes(graph,{node: i})
@@ -285,7 +282,6 @@ def find_hyper_edges(dual_graph: nx.Graph, edges_array_r: List[any],
     error_bound_graph.remove_edges_from(bad_edges)
     isolates = list(nx.isolates(error_bound_graph))
     error_bound_graph.remove_nodes_from(isolates)
-    # draw_graph_with_colored_edges_and_nodes(error_bound_graph, "img/hexcolor/decodergraph.png")
     cycles = nx.cycle_basis(error_bound_graph)
     return cycles     
 
@@ -303,7 +299,7 @@ def lift(dual_edge_cycles: List[any], faces: List[FrozenSet]) -> Set[any]:
     Takes: List of dual graph cycles, facenodes to face map
     Returns: List of enclosed og nodes
     """
-    ## Strategy: understand and comment the below code
+    ## Find corresponding nodes in original graph
     enc_nodes = set()
     for dual_edge_cycle in dual_edge_cycles:
         face_on_dec = dual_edge_cycle.pop()
@@ -402,21 +398,11 @@ def main() -> bool:
     draw_graph_with_colored_edges_and_nodes(dual_syn, "img/hexcolor/dual.png")
     for i, graph in enumerate([subr_syn, subg_syn, subb_syn]):      
         draw_graph_with_colored_edges_and_nodes(graph, f"img/hexcolor/{i}.png")
-    # print("The red prediction is: ", pred_r)
-    # print("The green prediction is: ", pred_g)
-    # print("The blue prediction is: ", pred_b)
-    # print("Hyperedges are: ", hyper_edges)
     if og_enc_nodes_by_dual_cycles:
         for i in range(len(og_enc_nodes_by_dual_cycles)):
             print(f"The {i}th error node on the graph is {og_enc_nodes_by_dual_cycles.pop()}")
     print("The actual errors were: ", actual_errors)
     return True
-
-    # dists = [(6,4)]#,(12,8),(24,8)]
-    # pers = linspace(0.01, 0.2, 20)
-    # nr = 1000
-    # cc_threshold_plotter(dists, pers, nr, "firstThreshold")
-    # return True
 
 if __name__ == "__main__":
     main()

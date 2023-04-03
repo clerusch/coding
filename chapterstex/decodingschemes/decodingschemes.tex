@@ -2,7 +2,7 @@ An important task towards achieving fault-tolerant quantum computation is
 finding efficient decoding schemes.
 Since error propagation on non-clifford gates cannot be simulated efficiently
 \cite{gottesmanFaultTolerant}, and we are only given syndromes by our ECC,
-the decoding scheme must be able to compute occured 
+the decoding scheme must be able to compute occurred 
 errors from syndromes in time before the quantum algorithm our computer intends 
 to calculate reaches a non-Clifford operation. This ideally requires very fast 
 classical computation of the syndrome decoding.
@@ -29,19 +29,19 @@ dual graphs and the resulting data qubit errors can just be joined
 dual Z graph, we know a Y error has occurred on that edge/data-qubit).
 An example of a distance 5 surface code with two Z errors, one X error and
 one Y error is shown in Figure \ref{fig: surface_code}.
-As with the ringcode, the decoding problem can be seen as either the
+As with the ring code, the decoding problem can be seen as either the
 solution of Equation \ref{eq: pcm} for a minimum weight $\vec{v}_{error}$
-or as a graph matching problem.
+or as a graph-matching problem.
 \input{chapterstex/decodingschemes/surfacetoric/mwpm}
 \input{chapterstex/decodingschemes/surfacetoric/unionfind}
 
 \subsection{Color code decoders}
 Unlike the surface and toric codes, in the color code the 
-data qubits sit on the graphs nodes, and the ancillas on the 
-graphs faces. Decoding the color code entails matching 
-three differently colored faces to its enclosed nodes.
+data qubits sit on the graph's nodes, and the ancillas on the 
+graph's faces. Decoding the color code entails matching 
+three differently colored faces to their enclosed nodes.
 This is a significantly more challenging task than
-decoding the 2D-codes, since optimal three-colored graph matching 
-is a confirmed NP-hard problem \cite{delfosse}.
+decoding the surface or toric code, since optimal three-colored graph hyperface matching 
+is an NP-hard problem \cite{delfosse}.
 \input{chapterstex/decodingschemes/color/lookup}
 \input{chapterstex/decodingschemes/color/lifting}
